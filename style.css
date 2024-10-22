@@ -1,0 +1,123 @@
+html, body {
+    background-color:black;
+    box-sizing:content-box;
+    color:white;
+    height:100vh;
+}
+#game {
+    display:grid;
+    grid-gap:8px;
+    grid-template-rows:auto 1fr auto;
+    height:100vh;
+    text-align:center;
+}
+#game-header {
+    display:grid;
+    grid-gap:8px;
+    grid-template-columns:repeat(6,1fr);
+    width:100%;
+}
+#game-home-team, #game-away-team {
+    font:normal 14pt Helvetica, sans-serif;
+    grid-column:span 3;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
+#game-home-team {
+    text-align:left;
+}
+#game-away-team {
+    text-align:right;
+}
+#game-home-score, #game-away-score {
+    color:gold;
+    font:normal 32pt 'Basicdots', monospace;
+    grid-column:span 2;
+    text-align:center;
+}
+#game-quarter {
+    font:normal 24pt 'Basicdots', monospace;
+    grid-column:span 2;
+    grid-row:span 2;
+    margin:auto;
+}
+#game-home-fouls, #game-away-fouls {
+    grid-column:span 2;
+}
+
+#game-play-by-play {
+    border:1px solid white;
+    border-radius:8px;
+    font:normal 14pt Helvetica, sans-serif;
+    overflow-y:scroll;
+    padding:4px;
+    text-align:left;
+}
+#game-play-by-play span {
+    display:block;
+}
+
+#game-players, #game-actions {
+    display:none;
+}
+#game-players.active, #game-actions.active {
+    display:grid;
+    grid-gap:8px;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    grid-template-rows:repeat(5,1fr);
+    text-align:center;
+}
+.player-button, .action-button {
+    align-content:center;
+    background-color:lightgray;
+    border-radius:8px;
+    color:black;
+    font:normal 14pt Helvetica, sans-serif;
+    height:12vh;
+    padding:4px;
+}
+.player-button.opponent {
+    background-color:black;
+    border:1px solid lightgray;
+    border-radius:8px;
+    color:white;
+    grid-column:span 3;
+}
+.action-button.cancel {
+    background-color:black;
+    border:1px solid lightgray;
+    color:white;
+}
+.player-button-number {
+    font:bold 24pt Helvetica, sans-serif;
+}
+.player-button-name {
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
+.dot {
+    background-color:black;
+    border:1px solid lightgray;
+    border-radius:50%;
+    display:inline-block;
+    height:3vw;
+    margin:4px;
+    width:3vw;
+}
+.gold {
+    background-color:gold;
+}
+.green {
+    background-color:green;
+    color:white;
+}
+.red {
+    background-color:red;
+    color:white;
+}
+.no-whitespace {
+    line-height:0;
+    font-size:0;
+}
