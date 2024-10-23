@@ -1,22 +1,21 @@
 html, body {
     background-color:black;
-    box-sizing:content-box;
+    /* box-sizing:content-box; */
     color:white;
-    margin:0;
+    margin:4px;
     height:100vh;
 }
 #game {
     display:grid;
     grid-gap:8px;
     grid-template-rows:auto 1fr auto;
-    height:100vh;
+    height:98vh;
     text-align:center;
 }
 #game-header {
     display:grid;
     grid-gap:8px;
     grid-template-columns:repeat(6,1fr);
-    width:100%;
 }
 #game-home-team, #game-away-team {
     font:normal 14pt Helvetica, sans-serif;
