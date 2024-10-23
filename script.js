@@ -35,7 +35,6 @@ var playByPlay = {
 var playerUuid;
 
 function playerClick(e) {
-    alert('playerClick e.id = ' + e.id);
     if (!e.id) {
         return false;
     }
@@ -43,7 +42,7 @@ function playerClick(e) {
     playerUuid = e.id;
 
     // navigate to actions page
-    navigator.vibrate(20);
+    // navigator.vibrate(20);
     document.querySelector('#game-players').className = 'inactive';
     document.querySelector('#game-actions').className = 'active';
     return true;
@@ -69,7 +68,7 @@ function actionClick(e) {
     }
 
     // navigate to players page
-    navigator.vibrate(20);
+    // navigator.vibrate(20);
     document.querySelector('#game-actions').className = 'inactive';
     document.querySelector('#game-players').className = 'active';
     return true;
