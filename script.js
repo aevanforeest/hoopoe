@@ -29,7 +29,6 @@ var game = {
         home: 'Home Team',
         away: 'Away Team',
     },
-    quarter: 'Q1',
     plays: {
         Q1: {},
         Q2: {},
@@ -38,6 +37,8 @@ var game = {
         OT: {},
     }
 };
+
+var gameQuarter = 'Q1';
 
 var playerUuid;
 
@@ -56,16 +57,21 @@ function playerClick(e) {
 
 function actionClick(e) {
     if (e.id) {
-        game.plays[game.quarter][generateUuid()] = { player:playerUuid, action:e.id };
+        const p = { player: playerUuid, action: e.id };
+        // special case - forced foul will automatically log committed foul on opponent
+        if (p.player != opponentUuid && p.action == 'FFL') {
+          game.plays[gameQuarter][generateUuid()] = { player: opponentUuid, action: 'FLC' };
+          updateFouls();
+        }
+        game.plays[gameQuarter][generateUuid()] = p;
         updatePlayByPlay();
-        switch (e.id) {
+        switch (p.action) {
         case 'M3P':
         case 'M2P':
         case 'MFT':
             updateScore();
             break;
         case 'FLC':
-        case 'FFL':
             updateFouls();
             break;
         }
@@ -78,14 +84,15 @@ function actionClick(e) {
 }
 
 function updatePlayByPlay() {
-    // update play by play
+    // delete play by play
     var pbp = document.querySelector('#game-play-by-play');
     var c;
     while (c = pbp.firstChild) {
         pbp.removeChild(c);
     }
 
-    for (const play of Object.values(game.plays[game.quarter])) {
+    // add play by play for the current quarter
+    for (const play of Object.values(game.plays[gameQuarter])) {
         var d;
         d = document.createElement('div');
         if (play.player != opponentUuid) {
@@ -98,10 +105,11 @@ function updatePlayByPlay() {
         d.innerText = document.querySelector('#' + play.action).innerText;
         pbp.appendChild(d);
     }
+    pbp.scrollTop = pbp.scrollHeight;
 }
 
 function updateScore() {
-    // update team score
+    // tally team scores for the game
     var ts = 0, os = 0;
     for (const [q, qp] of Object.entries(game.plays)) {
         for (const p of Object.values(qp)) {
@@ -112,23 +120,27 @@ function updateScore() {
             }
         }
     }
+    // update team scores
     document.querySelector('#game-home-score').innerText = ts;
     document.querySelector('#game-away-score').innerText = os;
 }
 
 function updateFouls() {
-    // update team fouls
+    // tally team fouls for the current quarter
     var tf = 0, of = 0;
-    for (const play of Object.values(game.plays[game.quarter])) {
+    for (const play of Object.values(game.plays[gameQuarter])) {
         if (play.player != opponentUuid) {
             tf += (play.action == 'FLC' ? 1 : 0);
-            of += (play.action == 'FFL' ? 1 : 0);
+            // of += (play.action == 'FFL' ? 1 : 0);
+        } else {
+            of += (play.action == 'FLC' ? 1 : 0);
         }
     }
+    // update team fouls
     setDots(document.querySelector('#game-home-fouls'), tf);
     setDots(document.querySelector('#game-away-fouls'), of);
 
-    // update player fouls
+    // tally player fouls for the game
     for (const [uuid, player] of Object.entries(players)) {
         var pf = 0;
         for (const [quarter, plays] of Object.entries(game.plays)) {
@@ -138,19 +150,19 @@ function updateFouls() {
                 }
             }
         }
+        // update player fouls
         setDots(document.querySelector('#' + uuid), pf);
     }
 }
 
-const MAX_TEAM_FOULS = 5;
-const MAX_PLAYER_FOULS = 5;
+const MAX_FOULS = 5;
 
 function setDots(parent, count) {
     var ds = parent.querySelectorAll('.dot');
     var i = 1;
     for (var d of ds) {
         if (i <= count) {
-            if (i == MAX_TEAM_FOULS) {
+            if (i == MAX_FOULS) {
                 d.className = 'dot red';
             } else {
                 d.className = 'dot gold';

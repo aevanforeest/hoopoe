@@ -39,6 +39,7 @@ html, body {
 }
 #game-quarter {
     font:normal 24pt 'Basicdots', monospace;
+    line-height:120%;
     grid-column:span 2;
     grid-row:span 2;
     margin:auto;
@@ -50,8 +51,6 @@ html, body {
 #game-play-by-play {
     border:1px solid white;
     border-radius:8px;
-    /* display:grid; */
-    /* grid-template-columns:1fr 2fr 3fr; */
     font:normal 14pt Helvetica, sans-serif;
     overflow-y:scroll;
     padding:4px;
@@ -91,17 +90,13 @@ html, body {
     height:12vh;
     padding:4px;
 }
-.player-button.opponent {
+.player-button.opponent, .action-button.cancel {
     background-color:black;
     border:1px solid lightgray;
-    border-radius:8px;
     color:white;
-    grid-column:span 3;
 }
-.action-button.cancel {
-    background-color:black;
-    border:1px solid lightgray;
-    color:white;
+.player-button.opponent {
+    grid-column:span 3;
 }
 .player-button-number {
     font:bold 24pt Helvetica, sans-serif;

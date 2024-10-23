@@ -7,6 +7,12 @@
     <link href="manifest.json" rel="manifest" />
     <link href="https://fonts.cdnfonts.com/css/basicdots" rel="stylesheet" />
     <link href="style.css" rel="stylesheet" />
+    <style type="text/css">
+      #game-quarter {
+        overflow-y:scroll;
+        height:1lh;
+      }
+    </style>
   </head>
   <body>
     <header></header>
@@ -17,7 +23,9 @@
           <div id="game-home-team">Home Team</div>
           <div id="game-away-team">Away Team</div>
           <div id="game-home-score">0</div>
-          <div id="game-quarter">Q1</div>
+          <div id="game-quarter">
+            <div>Q1</div><div>Q2</div><div>Q3</div><div>Q4</div><div>OT</div>
+          </div>
           <div id="game-away-score">0</div>
           <div id="game-home-fouls" class="no-whitespace">
             <div class="dot"></div>
