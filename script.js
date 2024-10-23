@@ -35,6 +35,7 @@ var playByPlay = {
 var playerUuid;
 
 function playerClick(e) {
+    alert('playerClick e.id = ' + e.id);
     if (!e.id) {
         return false;
     }
