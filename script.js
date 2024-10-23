@@ -24,12 +24,19 @@ const players = {
 
 const opponentUuid = '00000000-0000-0000-0000-000000000000';
 
-var playByPlay = {
-    'Q1': {},
-    'Q2': {},
-    'Q3': {},
-    'Q4': {},
-    'OT': {},
+var game = {
+    teams: {
+        home: 'Home Team',
+        away: 'Away Team',
+    },
+    quarter: 'Q1',
+    plays: {
+        Q1: {},
+        Q2: {},
+        Q3: {},
+        Q4: {},
+        OT: {},
+    }
 };
 
 var playerUuid;
@@ -42,66 +49,126 @@ function playerClick(e) {
     playerUuid = e.id;
 
     // navigate to actions page
-    // navigator.vibrate(20);
     document.querySelector('#game-players').className = 'inactive';
     document.querySelector('#game-actions').className = 'active';
     return true;
 }
 
 function actionClick(e) {
-    if (!e.id) {
-        return false;
+    if (e.id) {
+        game.plays[game.quarter][generateUuid()] = { player:playerUuid, action:e.id };
+        updatePlayByPlay();
+        switch (e.id) {
+        case 'M3P':
+        case 'M2P':
+        case 'MFT':
+            updateScore();
+            break;
+        case 'FLC':
+        case 'FFL':
+            updateFouls();
+            break;
+        }
     }
 
-    updatePlayByPlay({ player:playerUuid, action:e.id });
-
-    switch (e.id) {
-    case '3PM':
-    case '2PM':
-    case 'FTM':
-        updateScore();
-        break;
-    case 'FLC':
-    case 'FFL':
-        updateFouls();
-        break;
-    }
-
-    // navigate to players page
-    // navigator.vibrate(20);
+    // navigate back to players page
     document.querySelector('#game-actions').className = 'inactive';
     document.querySelector('#game-players').className = 'active';
     return true;
 }
 
+function updatePlayByPlay() {
+    // update play by play
+    var pbp = document.querySelector('#game-play-by-play');
+    var c;
+    while (c = pbp.firstChild) {
+        pbp.removeChild(c);
+    }
+
+    for (const play of Object.values(game.plays[game.quarter])) {
+        var d;
+        d = document.createElement('div');
+        if (play.player != opponentUuid) {
+            d.innerText = players[play.player].number + ' ' + players[play.player].name;
+        } else {
+            d.innerText = 'Opponent';
+        }
+        pbp.appendChild(d);
+        d = document.createElement('div');
+        d.innerText = document.querySelector('#' + play.action).innerText;
+        pbp.appendChild(d);
+    }
+}
+
 function updateScore() {
-    // tally score
+    // update team score
     var ts = 0, os = 0;
-    for (const [q, qp] of Object.entries(playByPlay)) {
+    for (const [q, qp] of Object.entries(game.plays)) {
         for (const p of Object.values(qp)) {
-            if (p.player == opponentUuid) {
-                os += (p.action == '3PM' ? 3 : p.action == '2PM' ? 2 : p.action == 'FTM' ? 1 : 0);
+            if (p.player != opponentUuid) {
+                ts += (p.action == 'M3P' ? 3 : p.action == 'M2P' ? 2 : p.action == 'MFT' ? 1 : 0);
             } else {
-                ts += (p.action == '3PM' ? 3 : p.action == '2PM' ? 2 : p.action == 'FTM' ? 1 : 0);
+                os += (p.action == 'M3P' ? 3 : p.action == 'M2M' ? 2 : p.action == 'MFT' ? 1 : 0);
             }
         }
     }
-    // update score
     document.querySelector('#game-home-score').innerText = ts;
     document.querySelector('#game-away-score').innerText = os;
 }
 
-function updatePlayByPlay(play) {
-    playByPlay['Q1'][generateUuid()] = play;
+function updateFouls() {
+    // update team fouls
+    var tf = 0, of = 0;
+    for (const play of Object.values(game.plays[game.quarter])) {
+        if (play.player != opponentUuid) {
+            tf += (play.action == 'FLC' ? 1 : 0);
+            of += (play.action == 'FFL' ? 1 : 0);
+        }
+    }
+    setDots(document.querySelector('#game-home-fouls'), tf);
+    setDots(document.querySelector('#game-away-fouls'), of);
+
+    // update player fouls
+    for (const [uuid, player] of Object.entries(players)) {
+        var pf = 0;
+        for (const [quarter, plays] of Object.entries(game.plays)) {
+            for (const play of Object.values(plays)) {
+                if (play.player == uuid) {
+                  pf += (play.action == 'FLC' ? 1 : 0);
+                }
+            }
+        }
+        setDots(document.querySelector('#' + uuid), pf);
+    }
+}
+
+const MAX_TEAM_FOULS = 5;
+const MAX_PLAYER_FOULS = 5;
+
+function setDots(parent, count) {
+    var ds = parent.querySelectorAll('.dot');
+    var i = 1;
+    for (var d of ds) {
+        if (i <= count) {
+            if (i == MAX_TEAM_FOULS) {
+                d.className = 'dot red';
+            } else {
+                d.className = 'dot gold';
+            }
+        } else {
+            d.className = 'dot';
+        }
+        i++;
+    }
 }
 
 function initPlayers(players) {
     if (Object.entries(players).length > 12) {
         return false;
     }
-    var i = 0;
+    var i = 1;
     for (const [uuid, p] of Object.entries(players)) {
-        var pb = document.querySelector('.player-button:nth-of-type(' + (++i) + ')');
+        var pb = document.querySelector('.player-button:nth-of-type(' + i + ')');
         pb.id = uuid;
         pb.onclick = function() { return playerClick(this); }
         var pbNumber = document.createElement('div');
@@ -119,6 +186,7 @@ function initPlayers(players) {
         pbFouls.appendChild(pbFoul);
         }
         pb.appendChild(pbFouls);
+        i++;
     }
     var pbo = document.querySelector('.player-button.opponent');
     pbo.id = '00000000-0000-0000-0000-000000000000';

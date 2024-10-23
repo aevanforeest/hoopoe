@@ -2,6 +2,7 @@ html, body {
     background-color:black;
     box-sizing:content-box;
     color:white;
+    margin:0;
     height:100vh;
 }
 #game {
@@ -49,13 +50,26 @@ html, body {
 #game-play-by-play {
     border:1px solid white;
     border-radius:8px;
+    /* display:grid; */
+    /* grid-template-columns:1fr 2fr 3fr; */
     font:normal 14pt Helvetica, sans-serif;
     overflow-y:scroll;
     padding:4px;
+}
+
+#game-play-by-play div {
+    float:left;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    width:50%;
+}
+
+#game-play-by-play div:nth-child(odd) {
     text-align:left;
 }
-#game-play-by-play span {
-    display:block;
+#game-play-by-play div:nth-child(even) {
+    text-align:right;
 }
 
 #game-players, #game-actions {
