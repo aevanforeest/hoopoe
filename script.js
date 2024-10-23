@@ -217,6 +217,14 @@ function initActions() {
 function initGame() {
     initPlayers(players);
     initActions();
+    document.querySelector('#game-quarter').onscrollsnapchange = function(e) {
+      var q = e.snapTargetBlock.innerText;
+      if (game.plays[q]) {
+        gameQuarter = q;
+        updatePlayByPlay();
+        updateFouls();
+      }
+    };
 }
 
 document.body.onload = function() {

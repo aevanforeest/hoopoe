@@ -39,10 +39,16 @@ html, body {
 }
 #game-quarter {
     font:normal 24pt 'Basicdots', monospace;
-    line-height:120%;
     grid-column:span 2;
     grid-row:span 2;
-    margin:auto;
+    height:1lh;
+    line-height:120%;
+    margin:auto 16px;
+    overflow-y:scroll;
+    scroll-snap-type:y mandatory;
+}
+#game-quarter div {
+    scroll-snap-align:center;
 }
 #game-home-fouls, #game-away-fouls {
     grid-column:span 2;
