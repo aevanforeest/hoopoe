@@ -42,12 +42,10 @@ var gameQuarter = 'Q1';
 
 var playerUuid;
 
-function playerClick(e) {
-    if (!e.id) {
-        return false;
+function playerClick(i) {
+    if (i) {
+        playerUuid = i;
     }
-
-    playerUuid = e.id;
 
     // navigate to actions page
     document.querySelector('#game-players').className = 'inactive';
@@ -55,9 +53,9 @@ function playerClick(e) {
     return true;
 }
 
-function actionClick(e) {
-    if (e.id) {
-        const p = { player: playerUuid, action: e.id };
+function actionClick(a) {
+    if (a) {
+        const p = { player: playerUuid, action: a };
         // special case - forced foul will automatically log committed foul on opponent
         if (p.player != opponentUuid && p.action == 'FFL') {
           game.plays[gameQuarter][generateUuid()] = { player: opponentUuid, action: 'FLC' };
@@ -181,8 +179,10 @@ function initPlayers(players) {
     var i = 1;
     for (const [uuid, p] of Object.entries(players)) {
         var pb = document.querySelector('.player-button:nth-of-type(' + i + ')');
+        pb.addEventListener('click', event => {
+            return playerClick(uuid);
+        });
         pb.id = uuid;
-        pb.onclick = function() { return playerClick(this); }
         var pbNumber = document.createElement('div');
         pbNumber.className = 'player-button-number';
         pbNumber.innerText = p.number;
@@ -201,8 +201,9 @@ function initPlayers(players) {
         i++;
     }
     var pbo = document.querySelector('.player-button.opponent');
-    pbo.id = '00000000-0000-0000-0000-000000000000';
-    pbo.onclick = function() { return playerClick(this); }
+    pbo.addEventListener('click', event => {
+        return playerClick(opponentUuid);
+    });
     pbo.innerText = 'Opponent';
 }
 
@@ -210,21 +211,39 @@ function initActions() {
     var abs = document.querySelectorAll('.action-button');
     for (var i = 0; i < abs.length; i++) {
         var ab = abs[i];
-        ab.onclick = function() { return actionClick(this); }
+        ab.addEventListener('click', event => {
+            return actionClick(event.target.id);
+        });
     }
 }
 
 function initGame() {
     initPlayers(players);
     initActions();
-    document.querySelector('#game-quarter').onscrollsnapchange = function(e) {
-      var q = e.snapTargetBlock.innerText;
+    // quarter selector
+    /*
+    document.querySelector('#game-quarter').addEventListener('scrollsnapchange', event => {
+      var q = event.snapTargetBlock.innerText;
       if (game.plays[q]) {
         gameQuarter = q;
         updatePlayByPlay();
         updateFouls();
       }
-    };
+    });
+    */
+   const gq = document.querySelector('#game-quarter');
+   gq.addEventListener('touchend', event => {
+    const ds = document.querySelectorAll('#game-quarter div');
+    const st = Math.floor(gq.scrollTop) + ds[0].offsetTop;
+    for (const d of ds) {
+      if (d.offsetTop == st) {
+        gameQuarter = d.innerText;
+        updatePlayByPlay();
+        updateFouls();
+        break;
+      }
+    }
+   });
 }
 
 document.body.onload = function() {
