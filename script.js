@@ -232,7 +232,7 @@ function initGame() {
     });
     */
    const gq = document.querySelector('#game-quarter');
-   gq.addEventListener('touchend', event => {
+   gq.addEventListener('scroll', event => {
     const ds = document.querySelectorAll('#game-quarter div');
     const st = Math.floor(gq.scrollTop) + ds[0].offsetTop;
     for (const d of ds) {
