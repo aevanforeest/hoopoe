@@ -128,7 +128,7 @@ function updateScore() {
     var ts = 0, os = 0;
     for (const [q, qp] of Object.entries(game.plays)) {
         for (const p of Object.values(qp)) {
-            var pt = (p.action == Actions.TWO_POINTS_MADE.uuid ? 2 : p.action == Actions.THREE_POINTS_MADE ? 3 : p.action == Actions.FREE_THROW_MADE ? 1 : 0);
+            var pt = (p.action == Actions.TWO_POINTS_MADE.uuid ? 2 : p.action == Actions.THREE_POINTS_MADE.uuid ? 3 : p.action == Actions.FREE_THROW_MADE.uuid ? 1 : 0);
             if (p.player != OPPONENT_UUID) {
                 ts += pt;
             } else {
