@@ -9,18 +9,18 @@ function generateUuid() {
 }
 
 const Actions = {
-    TWO_POINTS_MADE: { uuid:'M2P', text:'2P Made' },
-    THREE_POINTS_MADE: { uuid:'M3P', text:'3P Made' },
-    FREE_THROW_MADE: { uuid:'MFT', text:'FT Made' },
-    TWO_POINTS_MISS: { uuid:'X2P', text:'2P Miss' },
-    THREE_POINTS_MISS: { uuid:'X3P', text:'3P Miss' },
-    FREE_THROW_MISS: { uuid:'XFT', text:'FT Miss' },
-    OFFENSIVE_REBOUND: { uuid:'ORB', text:'Offensive Rebound' },
-    DEFENSIVE_REBOUND: { uuid:'DRB', text:'Defensive Rebound' },
-    FOUL_COMMITTED: { uuid:'FLC', text:'Foul Committed' },
+    TWO_POINTS_MADE: { uuid:'2PM', text:'2P Made' },
+    THREE_POINTS_MADE: { uuid:'3PM', text:'3P Made' },
+    FREE_THROW_MADE: { uuid:'FTM', text:'FT Made' },
+    TWO_POINTS_MISS: { uuid:'2PA', text:'2P Missed' },
+    THREE_POINTS_MISS: { uuid:'3PA', text:'3P Miss' },
+    FREE_THROW_MISS: { uuid:'FTA', text:'FT Miss' },
+    OFFENSIVE_REBOUND: { uuid:'OREB', text:'Offensive Rebound' },
+    DEFENSIVE_REBOUND: { uuid:'DREB', text:'Defensive Rebound' },
+    FOUL_COMMITTED: { uuid:'FC', text:'Foul Committed' },
     ASSIST: { uuid:'AST', text:'Assist' },
     STEAL: { uuid:'STL', text:'Steal' },
-    FORCED_FOUL: { uuid:'FFL', text:'Forced Foul' },
+    FORCED_FOUL: { uuid:'FF', text:'Forced Foul' },
     TURNOVER: { uuid:'TOV', text:'Turnover' },
     BLOCK: { uuid:'BLK', text:'Block' },
 };
@@ -107,17 +107,22 @@ function updatePlayByPlay() {
     }
 
     // add play by play for the current quarter
-    for (const play of Object.values(game.plays[gameQuarter])) {
+    for (const p of Object.values(game.plays[gameQuarter])) {
         var d;
         d = document.createElement('div');
-        if (play.player != OPPONENT_UUID) {
-            d.innerText = players[play.player].number + ' ' + players[play.player].name;
+        if (p.player != OPPONENT_UUID) {
+            d.innerText = players[p.player].number + ' ' + players[p.player].name;
         } else {
             d.innerText = 'Opponent';
         }
         pbp.appendChild(d);
         d = document.createElement('div');
-        d.innerText = document.querySelector('#' + play.action).innerText;
+        for (const a of Object.values(Actions)) {
+            if (p.action == a.uuid) {
+                d.innerText = a.text;
+                break;
+            }
+        }
         pbp.appendChild(d);
     }
     pbp.scrollTop = pbp.scrollHeight;

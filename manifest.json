@@ -1,5 +1,13 @@
 {
-    "short_name": "Hoopoe",
     "name": "Hoopoe: Basketball Statistics",
-    "display": "standalone"
+    "short_name": "Hoopoe",
+    "description": "Basketball Statistics",
+    "start_url": "/",
+    "display": "standalone",
+    "orientation": "portrait",
+    "background_color": "#000000",
+    "theme_color": "#ffffff",
+    "icons": [
+        
+    ]
 }

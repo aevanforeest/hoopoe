@@ -1,3 +1,4 @@
+
 html, body {
     box-sizing:border-box;
     margin:0;
@@ -7,7 +8,7 @@ body {
     background-color:black;
     color:white;
 }
-main {
+app {
     position:fixed;
     height:100vh;
     width:100vw;
@@ -117,6 +118,9 @@ main {
     overflow:hidden;
     text-overflow:ellipsis;
     white-space:nowrap;
+}
+.action-button {
+    font:normal 16pt Helvetica, sans-serif;
 }
 .dot {
     background-color:black;
