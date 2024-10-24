@@ -6,15 +6,17 @@ html, body {
 body {
     background-color:black;
     color:white;
-    height:100vh;
-    width:100vw;
+    height:100%;
+    width:100%;
 }
 #game {
+    position:fixed;
     display:grid;
     grid-gap:8px;
     grid-template-rows:auto 1fr auto;
-    height:100vh;
+    height:100%;
     text-align:center;
+    width:100%;
 }
 #game-header {
     display:grid;
