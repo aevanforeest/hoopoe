@@ -8,6 +8,23 @@ function generateUuid() {
     return uuid;
 }
 
+const Actions = {
+    TWO_POINTS_MADE: { uuid:'M2P', text:'2P Made' },
+    THREE_POINTS_MADE: { uuid:'M3P', text:'3P Made' },
+    FREE_THROW_MADE: { uuid:'MFT', text:'FT Made' },
+    TWO_POINTS_MISS: { uuid:'X2P', text:'2P Miss' },
+    THREE_POINTS_MISS: { uuid:'X3P', text:'3P Miss' },
+    FREE_THROW_MISS: { uuid:'XFT', text:'FT Miss' },
+    OFFENSIVE_REBOUND: { uuid:'ORB', text:'Offensive Rebound' },
+    DEFENSIVE_REBOUND: { uuid:'DRB', text:'Defensive Rebound' },
+    FOUL_COMMITTED: { uuid:'FLC', text:'Foul Committed' },
+    FORCED_FOUL: { uuid:'FFL', text:'' },
+    ASSIST: { uuid:'AST', text:'Assist' },
+    STEAL: { uuid:'STL', text:'Steal' },
+    TURNOVER: { uuid:'TOV', text:'Turnover' },
+    BLOCK: { uuid:'BLK', text:'Block' },
+};
+
 const players = {
     'd72fba2e-2855-4b82-aa49-612ee5e13a9a': { number:4, name:'David' },
     'd72fba2e-2855-4b82-aa49-612ee5e13a9b': { number:5, name:'Boris' },
@@ -22,7 +39,7 @@ const players = {
     'd72fba2e-2855-4b82-aa49-612ee5e13aa4': { number:15, name:'Filippo' },
 };
 
-const opponentUuid = '00000000-0000-0000-0000-000000000000';
+const OPPONENT_UUID = '00000000-0000-0000-0000-000000000000';
 
 var game = {
     teams: {
@@ -56,20 +73,20 @@ function playerClick(i) {
 function actionClick(a) {
     if (a) {
         const p = { player: playerUuid, action: a };
-        // special case - forced foul will automatically log committed foul on opponent
-        if (p.player != opponentUuid && p.action == 'FFL') {
-          game.plays[gameQuarter][generateUuid()] = { player: opponentUuid, action: 'FLC' };
+        // special case - forced foul will automatically log committed foul for opponent
+        if (p.player != OPPONENT_UUID && p.action == Actions.FORCED_FOUL.uuid) {
+          game.plays[gameQuarter][generateUuid()] = { player: OPPONENT_UUID, action: Actions.FOUL_COMMITTED.uuid };
           updateFouls();
         }
         game.plays[gameQuarter][generateUuid()] = p;
         updatePlayByPlay();
         switch (p.action) {
-        case 'M3P':
-        case 'M2P':
-        case 'MFT':
+        case Actions.TWO_POINTS_MADE.uuid:
+        case Actions.THREE_POINTS_MADE.uuid:
+        case Actions.FREE_THROW_MADE.uuid:
             updateScore();
             break;
-        case 'FLC':
+        case Actions.FOUL_COMMITTED.uuid:
             updateFouls();
             break;
         }
@@ -93,7 +110,7 @@ function updatePlayByPlay() {
     for (const play of Object.values(game.plays[gameQuarter])) {
         var d;
         d = document.createElement('div');
-        if (play.player != opponentUuid) {
+        if (play.player != OPPONENT_UUID) {
             d.innerText = players[play.player].number + ' ' + players[play.player].name;
         } else {
             d.innerText = 'Opponent';
@@ -111,10 +128,11 @@ function updateScore() {
     var ts = 0, os = 0;
     for (const [q, qp] of Object.entries(game.plays)) {
         for (const p of Object.values(qp)) {
-            if (p.player != opponentUuid) {
-                ts += (p.action == 'M3P' ? 3 : p.action == 'M2P' ? 2 : p.action == 'MFT' ? 1 : 0);
+            var pt = (p.action == Actions.TWO_POINTS_MADE.uuid ? 2 : p.action == Actions.THREE_POINTS_MADE ? 3 : p.action == Actions.FREE_THROW_MADE ? 1 : 0);
+            if (p.player != OPPONENT_UUID) {
+                ts += pt;
             } else {
-                os += (p.action == 'M3P' ? 3 : p.action == 'M2M' ? 2 : p.action == 'MFT' ? 1 : 0);
+                os += pt;
             }
         }
     }
@@ -127,11 +145,10 @@ function updateFouls() {
     // tally team fouls for the current quarter
     var tf = 0, of = 0;
     for (const play of Object.values(game.plays[gameQuarter])) {
-        if (play.player != opponentUuid) {
-            tf += (play.action == 'FLC' ? 1 : 0);
-            // of += (play.action == 'FFL' ? 1 : 0);
+        if (play.player != OPPONENT_UUID) {
+            tf += (play.action == Actions.FOUL_COMMITTED.uuid ? 1 : 0);
         } else {
-            of += (play.action == 'FLC' ? 1 : 0);
+            of += (play.action == Actions.FOUL_COMMITTED.uuid ? 1 : 0);
         }
     }
     // update team fouls
@@ -144,7 +161,7 @@ function updateFouls() {
         for (const [quarter, plays] of Object.entries(game.plays)) {
             for (const play of Object.values(plays)) {
                 if (play.player == uuid) {
-                  pf += (play.action == 'FLC' ? 1 : 0);
+                  pf += (play.action == Actions.FOUL_COMMITTED.uuid ? 1 : 0);
                 }
             }
         }
@@ -172,16 +189,14 @@ function setDots(parent, count) {
     }
 }
 
-function initPlayers(players) {
+function initPlayers() {
     if (Object.entries(players).length > 12) {
         return false;
     }
-    var i = 1;
+    var i = 0;
     for (const [uuid, p] of Object.entries(players)) {
-        var pb = document.querySelector('.player-button:nth-of-type(' + i + ')');
-        pb.addEventListener('click', event => {
-            return playerClick(uuid);
-        });
+        var pb = document.querySelector('.player-button:nth-of-type(' + (++i) + ')');
+        pb.addEventListener('click', event => { return playerClick(uuid); });
         pb.id = uuid;
         var pbNumber = document.createElement('div');
         pbNumber.className = 'player-button-number';
@@ -198,27 +213,27 @@ function initPlayers(players) {
         pbFouls.appendChild(pbFoul);
         }
         pb.appendChild(pbFouls);
-        i++;
     }
     var pbo = document.querySelector('.player-button.opponent');
-    pbo.addEventListener('click', event => {
-        return playerClick(opponentUuid);
-    });
+    pbo.addEventListener('click', event => { return playerClick(OPPONENT_UUID); });
     pbo.innerText = 'Opponent';
 }
 
 function initActions() {
-    var abs = document.querySelectorAll('.action-button');
-    for (var i = 0; i < abs.length; i++) {
-        var ab = abs[i];
-        ab.addEventListener('click', event => {
-            return actionClick(event.target.id);
-        });
+    var i = 0;
+    for (const a of Object.values(Actions)) {
+        var ab = document.querySelector('.action-button:nth-of-type(' + (++i) + ')');
+        ab.id = a.uuid;
+        ab.innerText = a.text;
+        ab.addEventListener('click', event => { return actionClick(event.target.id); });
     }
+    var abc = document.querySelector('.action-button.cancel');
+    abc.addEventListener('click', event => { return actionClick(); });
+    abc.innerText = 'Cancel';
 }
 
 function initGame() {
-    initPlayers(players);
+    initPlayers();
     initActions();
     // quarter selector
     /*
