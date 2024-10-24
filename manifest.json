@@ -2,7 +2,7 @@
     "name": "Hoopoe: Basketball Statistics",
     "short_name": "Hoopoe",
     "description": "Basketball Statistics",
-    "start_url": "/",
+    "start_url": "/hoopoe/",
     "display": "standalone",
     "orientation": "portrait",
     "background_color": "#000000",
