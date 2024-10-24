@@ -251,18 +251,18 @@ function initGame() {
       }
     });
     */
-   const gq = document.querySelector('#game-quarter');
-   gq.addEventListener('scroll', event => {
-    const ds = document.querySelectorAll('#game-quarter div');
-    const st = Math.floor(gq.scrollTop) + ds[0].offsetTop;
-    for (const d of ds) {
-      if (d.offsetTop == st) {
-        gameQuarter = d.innerText;
-        updatePlayByPlay();
-        updateFouls();
-        break;
+    const gq = document.querySelector('#game-quarter');
+    gq.addEventListener('scroll', event => {
+      const ds = document.querySelectorAll('#game-quarter div');
+      const st = Math.floor(gq.scrollTop) + ds[0].offsetTop;
+      for (const d of ds) {
+        if (d.offsetTop == st) {
+          gameQuarter = d.innerText;
+          updatePlayByPlay();
+          updateFouls();
+          break;
+        }
       }
-    }
    });
 }
 

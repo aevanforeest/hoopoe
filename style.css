@@ -10,9 +10,29 @@ body {
 }
 app {
     position:fixed;
-    height:100vh;
     width:100vw;
+    height:100vh;
 }
+
+#portrait-only {
+    align-content:center;
+    text-align:center;
+    width:100vw;
+    height:100vh;
+}
+
+@media (orientation:landscape) {
+    #portrait-only {
+        display:block;
+    }
+}
+
+@media (orientation:portrait) {
+    #portrait-only {
+        display:none;
+    }
+}
+
 #game {
     display:grid;
     grid-gap:8px;
