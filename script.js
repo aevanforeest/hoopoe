@@ -18,9 +18,9 @@ const Actions = {
     OFFENSIVE_REBOUND: { uuid:'ORB', text:'Offensive Rebound' },
     DEFENSIVE_REBOUND: { uuid:'DRB', text:'Defensive Rebound' },
     FOUL_COMMITTED: { uuid:'FLC', text:'Foul Committed' },
-    FORCED_FOUL: { uuid:'FFL', text:'' },
     ASSIST: { uuid:'AST', text:'Assist' },
     STEAL: { uuid:'STL', text:'Steal' },
+    FORCED_FOUL: { uuid:'FFL', text:'Forced Foul' },
     TURNOVER: { uuid:'TOV', text:'Turnover' },
     BLOCK: { uuid:'BLK', text:'Block' },
 };
