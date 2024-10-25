@@ -251,19 +251,28 @@ function initGame() {
       }
     });
     */
+
+    var to;
     const gq = document.querySelector('#game-quarter');
     gq.addEventListener('scroll', event => {
-      const ds = document.querySelectorAll('#game-quarter div');
-      const st = Math.floor(gq.scrollTop) + ds[0].offsetTop;
-      for (const d of ds) {
-        if (d.offsetTop == st) {
-          gameQuarter = d.innerText;
-          updatePlayByPlay();
-          updateFouls();
-          break;
-        }
+      if (to) {
+        clearTimeout(to);
       }
-   });
+      to = setTimeout(() => {
+        const ds = gq.querySelectorAll('div');
+        const st = Math.floor(gq.scrollTop) + ds[0].offsetTop;
+        for (const d of ds) {
+          if (d.offsetTop == st) {
+            // update quarter
+            gameQuarter = d.id;
+            updatePlayByPlay();
+            updateFouls();
+            break;
+          }
+          to = null;
+        }
+      }, 100);
+    }, false);
 }
 
 document.body.onload = function() {
