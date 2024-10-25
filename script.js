@@ -241,17 +241,6 @@ function initGame() {
     initPlayers();
     initActions();
     // quarter selector
-    /*
-    document.querySelector('#game-quarter').addEventListener('scrollsnapchange', event => {
-      var q = event.snapTargetBlock.innerText;
-      if (game.plays[q]) {
-        gameQuarter = q;
-        updatePlayByPlay();
-        updateFouls();
-      }
-    });
-    */
-
     var to;
     const gq = document.querySelector('#game-quarter');
     gq.addEventListener('scroll', event => {
