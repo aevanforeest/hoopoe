@@ -249,9 +249,9 @@ function initGame() {
       }
       to = setTimeout(() => {
         const ds = gq.querySelectorAll('div');
-        const st = Math.floor(gq.scrollTop) + ds[0].offsetTop;
+        const st = gq.scrollTop + ds[0].offsetTop;
         for (const d of ds) {
-          if (d.offsetTop == st) {
+          if (Math.abs(d.offsetTop - st) < 1) {
             // update quarter
             gameQuarter = d.id;
             updatePlayByPlay();
