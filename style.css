@@ -9,16 +9,16 @@ body {
     color:white;
 }
 app {
+    height:100%;
     position:fixed;
-    width:100vw;
-    height:100vh;
+    width:100%;
 }
 
 #portrait-only {
     align-content:center;
+    height:100%;
     text-align:center;
-    width:100vw;
-    height:100vh;
+    width:100%;
 }
 
 @media (orientation:landscape) {
@@ -39,6 +39,7 @@ app {
     grid-template-rows:auto 1fr auto;
     height:100%;
     text-align:center;
+    width:100%;
 }
 #game-header {
     display:grid;
