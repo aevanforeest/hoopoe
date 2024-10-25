@@ -258,7 +258,6 @@ function initGame() {
             updateFouls();
             break;
           }
-          to = null;
         }
       }, 100);
     }, false);
