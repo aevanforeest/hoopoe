@@ -25,6 +25,7 @@ const Actions = {
     BLOCK: { uuid:'BLK', text:'Block' },
 };
 
+// TODO: should come from DB
 const players = {
     'd72fba2e-2855-4b82-aa49-612ee5e13a9a': { number:4, name:'David' },
     'd72fba2e-2855-4b82-aa49-612ee5e13a9b': { number:5, name:'Boris' },
@@ -40,6 +41,7 @@ const players = {
 };
 
 const OPPONENT_UUID = '00000000-0000-0000-0000-000000000000';
+const OPPONENT_NAME = 'Opponent';
 
 var game = {
     teams: {
@@ -78,8 +80,9 @@ function actionClick(a) {
           game.plays[gameQuarter][generateUuid()] = { player: OPPONENT_UUID, action: Actions.FOUL_COMMITTED.uuid };
           updateFouls();
         }
+
         game.plays[gameQuarter][generateUuid()] = p;
-        updatePlayByPlay();
+
         switch (p.action) {
         case Actions.TWO_POINTS_MADE.uuid:
         case Actions.THREE_POINTS_MADE.uuid:
@@ -90,6 +93,8 @@ function actionClick(a) {
             updateFouls();
             break;
         }
+
+        updatePlayByPlay();
     }
 
     // navigate back to players page
@@ -100,11 +105,8 @@ function actionClick(a) {
 
 function updatePlayByPlay() {
     // delete play by play
-    var pbp = document.querySelector('#game-play-by-play');
-    var c;
-    while (c = pbp.firstChild) {
-        pbp.removeChild(c);
-    }
+    const pbp = document.querySelector('#game-play-by-play');
+    const lec = pbp.lastElementChild;
 
     // add play by play for the current quarter
     for (const p of Object.values(game.plays[gameQuarter])) {
@@ -113,7 +115,7 @@ function updatePlayByPlay() {
         if (p.player != OPPONENT_UUID) {
             d.innerText = players[p.player].number + ' ' + players[p.player].name;
         } else {
-            d.innerText = 'Opponent';
+            d.innerText = OPPONENT_NAME;
         }
         pbp.appendChild(d);
         d = document.createElement('div');
@@ -125,6 +127,15 @@ function updatePlayByPlay() {
         }
         pbp.appendChild(d);
     }
+
+    var c;
+    while (lec && (c = pbp.firstElementChild)) {
+        c.remove();
+        if (c == lec) {
+            break;
+        }
+    }
+
     pbp.scrollTop = pbp.scrollHeight;
 }
 
@@ -221,7 +232,7 @@ function initPlayers() {
     }
     var pbo = document.querySelector('.player-button.opponent');
     pbo.addEventListener('click', event => { return playerClick(OPPONENT_UUID); });
-    pbo.innerText = 'Opponent';
+    pbo.innerText = OPPONENT_NAME;
 }
 
 function initActions() {
@@ -254,8 +265,8 @@ function initGame() {
           if (Math.abs(d.offsetTop - st) < 1) {
             // update quarter
             gameQuarter = d.id;
-            updatePlayByPlay();
             updateFouls();
+            updatePlayByPlay();
             break;
           }
         }
