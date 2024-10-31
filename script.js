@@ -77,11 +77,13 @@ function actionClick(a) {
         const p = { player: playerUuid, action: a };
         // special case - forced foul will automatically log committed foul for opponent
         if (p.player != OPPONENT_UUID && p.action == Actions.FORCED_FOUL.uuid) {
-          game.plays[gameQuarter][generateUuid()] = { player: OPPONENT_UUID, action: Actions.FOUL_COMMITTED.uuid };
+          const op = { player: OPPONENT_UUID, action: Actions.FOUL_COMMITTED.uuid };
+          game.plays[gameQuarter][generateUuid()] = op;
           updateFouls();
         }
 
         game.plays[gameQuarter][generateUuid()] = p;
+        updatePlayByPlay();
 
         switch (p.action) {
         case Actions.TWO_POINTS_MADE.uuid:
@@ -93,8 +95,6 @@ function actionClick(a) {
             updateFouls();
             break;
         }
-
-        updatePlayByPlay();
     }
 
     // navigate back to players page
@@ -104,9 +104,13 @@ function actionClick(a) {
 }
 
 function updatePlayByPlay() {
-    // delete play by play
     const pbp = document.querySelector('#game-play-by-play');
-    const lec = pbp.lastElementChild;
+
+    // remove previous plays
+    var c;
+    while (c = pbp.firstElementChild) {
+        c.remove();
+    }
 
     // add play by play for the current quarter
     for (const p of Object.values(game.plays[gameQuarter])) {
@@ -126,14 +130,6 @@ function updatePlayByPlay() {
             }
         }
         pbp.appendChild(d);
-    }
-
-    var c;
-    while (lec && (c = pbp.firstElementChild)) {
-        c.remove();
-        if (c == lec) {
-            break;
-        }
     }
 
     pbp.scrollTop = pbp.scrollHeight;
