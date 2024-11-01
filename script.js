@@ -287,7 +287,7 @@ function initGame() {
                     x: event.changedTouches[0].clientX,
                     y: event.changedTouches[0].clientY,
                 };
-                if (Math.abs(sc.x - mc.x) >= e.clientWidth * 0.2) {
+                if (Math.abs(sc.x - mc.x) >= e.clientWidth * 0.25) {
                     e.style.left = (mc.x - sc.x) + 'px';
                     e.style.backgroundColor = 'red';
                 }
@@ -297,15 +297,14 @@ function initGame() {
                     x: event.changedTouches[0].clientX,
                     y: event.changedTouches[0].clientY,
                 };
-                e.style.backgroundColor = '';
-                e.style.left = '';
                 event.target.removeEventListener('touchmove', touchMove);
                 event.target.removeEventListener('touchend', touchEnd);
-                // slide at least 80%
-                if (Math.abs(sc.x - ec.x) >= e.clientWidth * 0.8) {
-                    // delete from plays
+                if (Math.abs(sc.x - ec.x) >= e.clientWidth * 0.75) {
                     delete game.plays[gameQuarter][e.id];
                     updatePlayByPlay();
+                } else {
+                    e.style.backgroundColor = '';
+                    e.style.left = '';
                 }
             }
             event.target.addEventListener('touchmove', touchMove);
