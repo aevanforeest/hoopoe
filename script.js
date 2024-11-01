@@ -282,13 +282,15 @@ function initGame() {
                 x: event.changedTouches[0].clientX,
                 y: event.changedTouches[0].clientY,
             };
-            e.style.backgroundColor = 'red';
             var touchMove = function(event) {
                 var mc = {
                     x: event.changedTouches[0].clientX,
                     y: event.changedTouches[0].clientY,
                 };
-                e.style.left = (mc.x - sc.x) + 'px';
+                if (Math.abs(sc.x - mc.x) >= e.clientWidth * 0.2) {
+                    e.style.left = (mc.x - sc.x) + 'px';
+                    e.style.backgroundColor = 'red';
+                }
             }
             var touchEnd = function(event) {
                 var ec = {
@@ -299,7 +301,8 @@ function initGame() {
                 e.style.left = '';
                 event.target.removeEventListener('touchmove', touchMove);
                 event.target.removeEventListener('touchend', touchEnd);
-                if (Math.abs(sc.x - ec.x) >= pbp.clientWidth) {
+                // slide at least 80%
+                if (Math.abs(sc.x - ec.x) >= e.clientWidth * 0.8) {
                     // delete from plays
                     delete game.plays[gameQuarter][e.id];
                     updatePlayByPlay();
