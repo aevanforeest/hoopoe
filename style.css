@@ -9,9 +9,9 @@ body {
     color:white;
 }
 app {
-    height:100%;
+    height:100vh;
     position:fixed;
-    width:100%;
+    width:100vw;
 }
 
 #portrait-only {
@@ -41,11 +41,13 @@ app {
     text-align:center;
     width:100%;
 }
+
 #game-header {
     display:grid;
     grid-gap:8px;
     grid-template-columns:repeat(6,1fr);
 }
+
 #game-home-team, #game-away-team {
     font:normal 14pt Helvetica, sans-serif;
     grid-column:span 3;
@@ -73,10 +75,11 @@ app {
     height:1lh;
     line-height:140%;
     overflow-y:scroll;
+    overscroll-behavior-y:none;
     padding:4px;
     scroll-snap-type:y mandatory;
 }
-#game-quarter div {
+#game-quarter > div {
     scroll-snap-align:center;
 }
 #game-home-fouls, #game-away-fouls {
@@ -92,7 +95,12 @@ app {
     padding:4px;
 }
 
-#game-play-by-play div {
+#game-play-by-play > div {
+    height:1lh;
+    position:relative;
+}
+
+#game-play-by-play > div > div {
     float:left;
     overflow:hidden;
     text-overflow:ellipsis;
@@ -100,10 +108,10 @@ app {
     width:50%;
 }
 
-#game-play-by-play div:nth-child(odd) {
+#game-play-by-play > div > div:nth-child(odd) {
     text-align:left;
 }
-#game-play-by-play div:nth-child(even) {
+#game-play-by-play > div > div:nth-child(even) {
     text-align:right;
 }
 

@@ -77,9 +77,9 @@ function actionClick(a) {
         const p = { player: playerUuid, action: a };
         // special case - forced foul will automatically log committed foul for opponent
         if (p.player != OPPONENT_UUID && p.action == Actions.FORCED_FOUL.uuid) {
-          const op = { player: OPPONENT_UUID, action: Actions.FOUL_COMMITTED.uuid };
-          game.plays[gameQuarter][generateUuid()] = op;
-          updateFouls();
+            const op = { player: OPPONENT_UUID, action: Actions.FOUL_COMMITTED.uuid };
+            game.plays[gameQuarter][generateUuid()] = op;
+            updateFouls();
         }
 
         game.plays[gameQuarter][generateUuid()] = p;
@@ -113,23 +113,25 @@ function updatePlayByPlay() {
     }
 
     // add play by play for the current quarter
-    for (const p of Object.values(game.plays[gameQuarter])) {
-        var d;
-        d = document.createElement('div');
+    for (const [pid, p] of Object.entries(game.plays[gameQuarter])) {
+        var od = document.createElement('div');
+        od.id = pid;
+        var pd = document.createElement('div');
         if (p.player != OPPONENT_UUID) {
-            d.innerText = players[p.player].number + ' ' + players[p.player].name;
+            pd.innerText = players[p.player].number + ' ' + players[p.player].name;
         } else {
-            d.innerText = OPPONENT_NAME;
+            pd.innerText = OPPONENT_NAME;
         }
-        pbp.appendChild(d);
-        d = document.createElement('div');
+        od.appendChild(pd);
+        var ad = document.createElement('div');
         for (const a of Object.values(Actions)) {
             if (p.action == a.uuid) {
-                d.innerText = a.text;
+                ad.innerText = a.text;
                 break;
             }
         }
-        pbp.appendChild(d);
+        od.appendChild(ad);
+        pbp.appendChild(od);
     }
 
     pbp.scrollTop = pbp.scrollHeight;
@@ -208,7 +210,7 @@ function initPlayers() {
     var i = 0;
     for (const [uuid, p] of Object.entries(players)) {
         var pb = document.querySelector('.player-button:nth-of-type(' + (++i) + ')');
-        pb.addEventListener('click', event => { return playerClick(uuid); });
+        pb.addEventListener('click', (event) => { return playerClick(uuid); });
         pb.id = uuid;
         var pbNumber = document.createElement('div');
         pbNumber.className = 'player-button-number';
@@ -220,14 +222,14 @@ function initPlayers() {
         pb.appendChild(pbName);
         var pbFouls = document.createElement('div');
         for (var j = 0; j < 5; j++) {
-        var pbFoul = document.createElement('div');
-        pbFoul.className = 'dot';
-        pbFouls.appendChild(pbFoul);
+            var pbFoul = document.createElement('div');
+            pbFoul.className = 'dot';
+            pbFouls.appendChild(pbFoul);
         }
         pb.appendChild(pbFouls);
     }
     var pbo = document.querySelector('.player-button.opponent');
-    pbo.addEventListener('click', event => { return playerClick(OPPONENT_UUID); });
+    pbo.addEventListener('click', (event) => { return playerClick(OPPONENT_UUID); });
     pbo.innerText = OPPONENT_NAME;
 }
 
@@ -237,12 +239,14 @@ function initActions() {
         var ab = document.querySelector('.action-button:nth-of-type(' + (++i) + ')');
         ab.id = a.uuid;
         ab.innerText = a.text;
-        ab.addEventListener('click', event => { return actionClick(event.target.id); });
+        ab.addEventListener('click', (event) => { return actionClick(event.target.id); });
     }
     var abc = document.querySelector('.action-button.cancel');
-    abc.addEventListener('click', event => { return actionClick(); });
+    abc.addEventListener('click', (event) => { return actionClick(); });
     abc.innerText = 'Cancel';
 }
+
+const LONG_PRESS_MS = 1000;
 
 function initGame() {
     initPlayers();
@@ -250,26 +254,73 @@ function initGame() {
     // quarter selector
     var to;
     const gq = document.querySelector('#game-quarter');
-    gq.addEventListener('scroll', event => {
-      if (to) {
-        clearTimeout(to);
-      }
-      to = setTimeout(() => {
-        const ds = gq.querySelectorAll('div');
-        const st = gq.scrollTop + ds[0].offsetTop;
-        for (const d of ds) {
-          if (Math.abs(d.offsetTop - st) < 1) {
-            // update quarter
-            gameQuarter = d.id;
-            updateFouls();
-            updatePlayByPlay();
-            break;
-          }
+    gq.addEventListener('scroll', (event) => {
+        if (to) {
+           clearTimeout(to);
         }
-      }, 100);
-    }, false);
+        to = setTimeout(() => {
+            const ds = gq.querySelectorAll('div');
+            const st = gq.scrollTop + ds[0].offsetTop;
+            for (const d of ds) {
+                if (Math.abs(d.offsetTop - st) < 1) {
+                    // update quarter
+                    gameQuarter = d.id;
+                    updatePlayByPlay();
+                    updateFouls();
+                    break;
+                }
+            }
+        }, 100);
+    });
+
+    // slide action to delete
+    const pbp = document.querySelector('#game-play-by-play');
+    pbp.addEventListener('touchstart', (event) => {
+        const e = event.target.parentNode;
+        if (e.parentNode.id === 'game-play-by-play') {
+            var sc = {
+                x: event.changedTouches[0].clientX,
+                y: event.changedTouches[0].clientY,
+            };
+            e.style.backgroundColor = 'red';
+            var touchMove = function(event) {
+                var mc = {
+                    x: event.changedTouches[0].clientX,
+                    y: event.changedTouches[0].clientY,
+                };
+                e.style.left = (mc.x - sc.x) + 'px';
+            }
+            var touchEnd = function(event) {
+                var ec = {
+                    x: event.changedTouches[0].clientX,
+                    y: event.changedTouches[0].clientY,
+                };
+                e.style.backgroundColor = '';
+                e.style.left = '';
+                event.target.removeEventListener('touchmove', touchMove);
+                event.target.removeEventListener('touchend', touchEnd);
+                if (Math.abs(sc.x - ec.x) >= pbp.clientWidth) {
+                    // delete from plays
+                    delete game.plays[gameQuarter][e.id];
+                    updatePlayByPlay();
+                }
+            }
+            event.target.addEventListener('touchmove', touchMove);
+            event.target.addEventListener('touchend', touchEnd);
+        }
+    });
 }
 
-document.body.onload = function() {
+// FGM FGA FG%
+// 3PM 3PA 3P%
+// OREB DREB REB
+// AST TOV STL BLK
+// FC FD
+// EFF: (PTS + REB + AST + STL + BLK − (FGA-FGM) − (FTA-FTM) - TOV)
+// PTS
+
+// PIR: (PTS + REB + AST + STL + BLK + FD) - (FGA-FGM) - (FTA-FTM) - TOV - FC)
+
+window.addEventListener('load', (event) => {
     initGame();
-}
+});
