@@ -96,7 +96,9 @@ app {
 }
 
 #game-play-by-play > div {
+    border-radius:8px;
     height:1lh;
+    padding:4px;
     position:relative;
 }
 
