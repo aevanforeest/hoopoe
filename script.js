@@ -287,9 +287,13 @@ function initGame() {
                     x: event.changedTouches[0].clientX,
                     y: event.changedTouches[0].clientY,
                 };
-                if (Math.abs(sc.x - mc.x) >= e.clientWidth * 0.25) {
+                if (sc.x - mc.x >= e.clientWidth * 0.10) {
                     e.style.left = (mc.x - sc.x) + 'px';
+                }
+                if (sc.x - mc.x >= e.clientWidth * 0.50) {
                     e.style.backgroundColor = 'red';
+                } else {
+                    e.style.backgroundColor = '';
                 }
             }
             var touchEnd = function(event) {
@@ -299,7 +303,7 @@ function initGame() {
                 };
                 event.target.removeEventListener('touchmove', touchMove);
                 event.target.removeEventListener('touchend', touchEnd);
-                if (Math.abs(sc.x - ec.x) >= e.clientWidth * 0.75) {
+                if (sc.x - ec.x >= e.clientWidth * 0.50) {
                     delete game.plays[gameQuarter][e.id];
                     updatePlayByPlay();
                 } else {
