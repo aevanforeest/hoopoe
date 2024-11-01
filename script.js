@@ -306,6 +306,8 @@ function initGame() {
                 if (sc.x - ec.x >= e.clientWidth * 0.50) {
                     delete game.plays[gameQuarter][e.id];
                     updatePlayByPlay();
+                    updateScore();
+                    updateFouls();
                 } else {
                     e.style.backgroundColor = '';
                     e.style.left = '';
