@@ -20,7 +20,7 @@ const Actions = {
     FOUL_COMMITTED: { uuid:'FC', text:'Foul Committed' },
     ASSIST: { uuid:'AST', text:'Assist' },
     STEAL: { uuid:'STL', text:'Steal' },
-    FORCED_FOUL: { uuid:'FF', text:'Forced Foul' },
+    FOUL_DRAWN: { uuid:'FD', text:'Foul Drawn' },
     TURNOVER: { uuid:'TOV', text:'Turnover' },
     BLOCK: { uuid:'BLK', text:'Block' },
 };
@@ -76,7 +76,7 @@ function actionClick(a) {
     if (a) {
         const p = { player: playerUuid, action: a };
         // special case - forced foul will automatically log committed foul for opponent
-        if (p.player != OPPONENT_UUID && p.action == Actions.FORCED_FOUL.uuid) {
+        if (p.player != OPPONENT_UUID && p.action == Actions.FOUL_DRAWN.uuid) {
             const op = { player: OPPONENT_UUID, action: Actions.FOUL_COMMITTED.uuid };
             game.plays[gameQuarter][generateUuid()] = op;
             updateFouls();
@@ -238,6 +238,14 @@ function initActions() {
     for (const a of Object.values(Actions)) {
         var ab = document.querySelector('.action-button:nth-of-type(' + (++i) + ')');
         ab.id = a.uuid;
+        // var abCode = document.createElement('div');
+        // abCode.className = 'action-button-code';
+        // abCode.innerText = a.uuid;
+        // ab.appendChild(abCode);
+        // var abText = document.createElement('div');
+        // abText.className = 'action-button-text';
+        // abText.innerText = a.text;
+        // ab.appendChild(abText);
         ab.innerText = a.text;
         ab.addEventListener('click', (event) => { return actionClick(event.target.id); });
     }
@@ -245,8 +253,6 @@ function initActions() {
     abc.addEventListener('click', (event) => { return actionClick(); });
     abc.innerText = 'Cancel';
 }
-
-const LONG_PRESS_MS = 1000;
 
 function initGame() {
     initPlayers();
@@ -273,50 +279,60 @@ function initGame() {
         }, 100);
     });
 
-    // slide action to delete
+     // slide action to delete
     const pbp = document.querySelector('#game-play-by-play');
     pbp.addEventListener('touchstart', (event) => {
+        // clear any pending deletables
+        const ds = document.querySelectorAll('#game-play-by-play > div.delete');
+        for (const d of ds) {
+            d.className = '';
+        }
+
         const e = event.target.parentNode;
-        if (e.parentNode.id === 'game-play-by-play') {
-            var sc = {
+        if (e.parentNode.id !== 'game-play-by-play') {
+            return false;
+        }
+        var sc = {
+            x: event.changedTouches[0].clientX,
+            y: event.changedTouches[0].clientY,
+        };
+        var click = function(event) {
+            delete game.plays[gameQuarter][e.id];
+            updatePlayByPlay();
+            updateScore();
+            updateFouls();
+        };
+        var touchMove = function(event) {
+            var mc = {
                 x: event.changedTouches[0].clientX,
                 y: event.changedTouches[0].clientY,
             };
-            var touchMove = function(event) {
-                var mc = {
-                    x: event.changedTouches[0].clientX,
-                    y: event.changedTouches[0].clientY,
-                };
-                if (sc.x - mc.x >= e.clientWidth * 0.10) {
-                    e.style.left = (mc.x - sc.x) + 'px';
+            e.style.left = (mc.x - sc.x) + 'px';
+            if (e.className === 'delete') {
+                if (Math.abs(sc.x - mc.x) < e.clientWidth * 0.25) {
+                    e.removeEventListener('click', click);
+                    e.className = '';
                 }
-                if (sc.x - mc.x >= e.clientWidth * 0.50) {
-                    e.style.backgroundColor = 'red';
-                } else {
-                    e.style.backgroundColor = '';
+            } else {
+                if (Math.abs(sc.x - mc.x) >= e.clientWidth * 0.25) {
+                    e.addEventListener('click', click);
+                    e.className = 'delete';
                 }
             }
-            var touchEnd = function(event) {
-                var ec = {
-                    x: event.changedTouches[0].clientX,
-                    y: event.changedTouches[0].clientY,
-                };
-                event.target.removeEventListener('touchmove', touchMove);
-                event.target.removeEventListener('touchend', touchEnd);
-                if (sc.x - ec.x >= e.clientWidth * 0.50) {
-                    delete game.plays[gameQuarter][e.id];
-                    updatePlayByPlay();
-                    updateScore();
-                    updateFouls();
-                } else {
-                    e.style.backgroundColor = '';
-                    e.style.left = '';
-                }
-            }
-            event.target.addEventListener('touchmove', touchMove);
-            event.target.addEventListener('touchend', touchEnd);
-        }
+        };
+        var touchEnd = function(event) {
+            var ec = {
+                x: event.changedTouches[0].clientX,
+                y: event.changedTouches[0].clientY,
+            };
+            e.style.left = '0';
+            e.removeEventListener('touchmove', touchMove);
+            e.removeEventListener('touchend', touchEnd);
+        };
+        e.addEventListener('touchmove', touchMove);
+        e.addEventListener('touchend', touchEnd);
     });
+
 }
 
 // FGM FGA FG%

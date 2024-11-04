@@ -102,6 +102,10 @@ app {
     position:relative;
 }
 
+#game-play-by-play > div.delete {
+    background-color:red;
+}
+
 #game-play-by-play > div > div {
     float:left;
     overflow:hidden;
@@ -155,6 +159,9 @@ app {
 .action-button {
     font:normal 16pt Helvetica, sans-serif;
 }
+/* .action-button-code {
+    font:bold 24pt Helvetica, sans-serif;
+} */
 .dot {
     background-color:black;
     border:1px solid lightgray;
