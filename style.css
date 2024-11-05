@@ -7,6 +7,8 @@ html, body {
 body {
     background-color:black;
     color:white;
+    user-select:none;
+    -webkit-user-select:none;
 }
 app {
     height:100vh;
@@ -14,7 +16,7 @@ app {
     width:100vw;
 }
 
-#portrait-only {
+#portrait-only, #welcome-screen {
     align-content:center;
     height:100%;
     text-align:center;
@@ -137,8 +139,11 @@ app {
     border-radius:8px;
     color:black;
     font:normal 14pt Helvetica, sans-serif;
-    height:12vh;
+    height:11vh;
     padding:4px;
+}
+.player-button.bench {
+    background-color:darkgray;
 }
 .player-button.opponent, .action-button.cancel {
     background-color:black;
@@ -156,12 +161,6 @@ app {
     text-overflow:ellipsis;
     white-space:nowrap;
 }
-.action-button {
-    font:normal 16pt Helvetica, sans-serif;
-}
-/* .action-button-code {
-    font:bold 24pt Helvetica, sans-serif;
-} */
 .dot {
     background-color:black;
     border:1px solid lightgray;

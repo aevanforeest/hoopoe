@@ -9,20 +9,20 @@ function generateUuid() {
 }
 
 const Actions = {
-    TWO_POINTS_MADE: { uuid:'2PM', text:'2P Made' },
-    THREE_POINTS_MADE: { uuid:'3PM', text:'3P Made' },
-    FREE_THROW_MADE: { uuid:'FTM', text:'FT Made' },
-    TWO_POINTS_MISS: { uuid:'2PA', text:'2P Missed' },
-    THREE_POINTS_MISS: { uuid:'3PA', text:'3P Miss' },
-    FREE_THROW_MISS: { uuid:'FTA', text:'FT Miss' },
-    OFFENSIVE_REBOUND: { uuid:'OREB', text:'Offensive Rebound' },
-    DEFENSIVE_REBOUND: { uuid:'DREB', text:'Defensive Rebound' },
-    FOUL_COMMITTED: { uuid:'FC', text:'Foul Committed' },
-    ASSIST: { uuid:'AST', text:'Assist' },
-    STEAL: { uuid:'STL', text:'Steal' },
-    FOUL_DRAWN: { uuid:'FD', text:'Foul Drawn' },
-    TURNOVER: { uuid:'TOV', text:'Turnover' },
-    BLOCK: { uuid:'BLK', text:'Block' },
+    TWO_POINTS_MADE: { code:'2PM', text:'2P Made' },
+    THREE_POINTS_MADE: { code:'3PM', text:'3P Made' },
+    FREE_THROW_MADE: { code:'FTM', text:'FT Made' },
+    TWO_POINTS_MISS: { code:'2PA', text:'2P Missed' },
+    THREE_POINTS_MISS: { code:'3PA', text:'3P Miss' },
+    FREE_THROW_MISS: { code:'FTA', text:'FT Miss' },
+    OFFENSIVE_REBOUND: { code:'OREB', text:'Offensive Rebound' },
+    DEFENSIVE_REBOUND: { code:'DREB', text:'Defensive Rebound' },
+    FOUL_COMMITTED: { code:'FC', text:'Foul Committed' },
+    ASSIST: { code:'AST', text:'Assist' },
+    STEAL: { code:'STL', text:'Steal' },
+    FOUL_DRAWN: { code:'FD', text:'Foul Drawn' },
+    TURNOVER: { code:'TOV', text:'Turnover' },
+    BLOCK: { code:'BLK', text:'Block' },
 };
 
 // TODO: should come from DB
@@ -76,8 +76,8 @@ function actionClick(a) {
     if (a) {
         const p = { player: playerUuid, action: a };
         // special case - forced foul will automatically log committed foul for opponent
-        if (p.player != OPPONENT_UUID && p.action == Actions.FOUL_DRAWN.uuid) {
-            const op = { player: OPPONENT_UUID, action: Actions.FOUL_COMMITTED.uuid };
+        if (p.player != OPPONENT_UUID && p.action == Actions.FOUL_DRAWN.code) {
+            const op = { player: OPPONENT_UUID, action: Actions.FOUL_COMMITTED.code };
             game.plays[gameQuarter][generateUuid()] = op;
             updateFouls();
         }
@@ -86,12 +86,12 @@ function actionClick(a) {
         updatePlayByPlay();
 
         switch (p.action) {
-        case Actions.TWO_POINTS_MADE.uuid:
-        case Actions.THREE_POINTS_MADE.uuid:
-        case Actions.FREE_THROW_MADE.uuid:
+        case Actions.TWO_POINTS_MADE.code:
+        case Actions.THREE_POINTS_MADE.code:
+        case Actions.FREE_THROW_MADE.code:
             updateScore();
             break;
-        case Actions.FOUL_COMMITTED.uuid:
+        case Actions.FOUL_COMMITTED.code:
             updateFouls();
             break;
         }
@@ -125,16 +125,18 @@ function updatePlayByPlay() {
         od.appendChild(pd);
         var ad = document.createElement('div');
         for (const a of Object.values(Actions)) {
-            if (p.action == a.uuid) {
+            if (p.action == a.code) {
                 ad.innerText = a.text;
                 break;
             }
         }
         od.appendChild(ad);
-        pbp.appendChild(od);
+        //pbp.appendChild(od);
+        pbp.insertBefore(od, pbp.firstChild);
     }
 
-    pbp.scrollTop = pbp.scrollHeight;
+    //pbp.scrollTop = pbp.scrollHeight;
+    pbp.scrollTop = 0;
 }
 
 function updateScore() {
@@ -142,7 +144,7 @@ function updateScore() {
     var ts = 0, os = 0;
     for (const [q, qp] of Object.entries(game.plays)) {
         for (const p of Object.values(qp)) {
-            var pt = (p.action == Actions.TWO_POINTS_MADE.uuid ? 2 : p.action == Actions.THREE_POINTS_MADE.uuid ? 3 : p.action == Actions.FREE_THROW_MADE.uuid ? 1 : 0);
+            var pt = (p.action == Actions.TWO_POINTS_MADE.code ? 2 : p.action == Actions.THREE_POINTS_MADE.code ? 3 : p.action == Actions.FREE_THROW_MADE.code ? 1 : 0);
             if (p.player != OPPONENT_UUID) {
                 ts += pt;
             } else {
@@ -160,9 +162,9 @@ function updateFouls() {
     var tf = 0, of = 0;
     for (const play of Object.values(game.plays[gameQuarter])) {
         if (play.player != OPPONENT_UUID) {
-            tf += (play.action == Actions.FOUL_COMMITTED.uuid ? 1 : 0);
+            tf += (play.action == Actions.FOUL_COMMITTED.code ? 1 : 0);
         } else {
-            of += (play.action == Actions.FOUL_COMMITTED.uuid ? 1 : 0);
+            of += (play.action == Actions.FOUL_COMMITTED.code ? 1 : 0);
         }
     }
     // update team fouls
@@ -175,7 +177,7 @@ function updateFouls() {
         for (const [quarter, plays] of Object.entries(game.plays)) {
             for (const play of Object.values(plays)) {
                 if (play.player == uuid) {
-                  pf += (play.action == Actions.FOUL_COMMITTED.uuid ? 1 : 0);
+                  pf += (play.action == Actions.FOUL_COMMITTED.code ? 1 : 0);
                 }
             }
         }
@@ -237,7 +239,7 @@ function initActions() {
     var i = 0;
     for (const a of Object.values(Actions)) {
         var ab = document.querySelector('.action-button:nth-of-type(' + (++i) + ')');
-        ab.id = a.uuid;
+        ab.id = a.code;
         // var abCode = document.createElement('div');
         // abCode.className = 'action-button-code';
         // abCode.innerText = a.uuid;
@@ -258,13 +260,13 @@ function initGame() {
     initPlayers();
     initActions();
     // quarter selector
-    var to;
+    var gqto;
     const gq = document.querySelector('#game-quarter');
     gq.addEventListener('scroll', (event) => {
-        if (to) {
-           clearTimeout(to);
+        if (gqto) {
+           clearTimeout(gqto);
         }
-        to = setTimeout(() => {
+        gqto = setTimeout(() => {
             const ds = gq.querySelectorAll('div');
             const st = gq.scrollTop + ds[0].offsetTop;
             for (const d of ds) {
@@ -307,16 +309,19 @@ function initGame() {
                 x: event.changedTouches[0].clientX,
                 y: event.changedTouches[0].clientY,
             };
-            e.style.left = (mc.x - sc.x) + 'px';
-            if (e.className === 'delete') {
-                if (Math.abs(sc.x - mc.x) < e.clientWidth * 0.25) {
-                    e.removeEventListener('click', click);
-                    e.className = '';
-                }
-            } else {
-                if (Math.abs(sc.x - mc.x) >= e.clientWidth * 0.25) {
-                    e.addEventListener('click', click);
-                    e.className = 'delete';
+            const dx = sc.x - mc.x;
+            if (dx >= 0) {
+                e.style.left = -dx + 'px';
+                if (e.className === 'delete') {
+                    if (dx < e.clientWidth * 0.25) {
+                        e.removeEventListener('click', click);
+                        e.className = '';
+                    }
+                } else {
+                    if (dx >= e.clientWidth * 0.25) {
+                        e.addEventListener('click', click);
+                        e.className = 'delete';
+                    }
                 }
             }
         };
@@ -325,7 +330,7 @@ function initGame() {
                 x: event.changedTouches[0].clientX,
                 y: event.changedTouches[0].clientY,
             };
-            e.style.left = '0';
+            e.style.left = 0;
             e.removeEventListener('touchmove', touchMove);
             e.removeEventListener('touchend', touchEnd);
         };
@@ -333,6 +338,24 @@ function initGame() {
         e.addEventListener('touchend', touchEnd);
     });
 
+    // long press user handler
+    var ubto;
+    const ubs = document.querySelectorAll('.player-button');
+    for (const ub of ubs) {
+        ub.addEventListener('touchstart', (event) => {
+            ubto = setTimeout(() => {
+                // toggle substitute
+                if (event.target.parentNode.className.includes('bench')) {
+                    event.target.parentNode.className = 'player-button';
+                } else {
+                    event.target.parentNode.className = 'player-button bench';
+                }
+            }, 500);
+        });
+        ub.addEventListener('touchend', (event) => {
+            clearTimeout(ubto);
+        });
+    }
 }
 
 // FGM FGA FG%
@@ -346,5 +369,9 @@ function initGame() {
 // PIR: (PTS + REB + AST + STL + BLK + FD) - (FGA-FGM) - (FTA-FTM) - TOV - FC)
 
 window.addEventListener('load', (event) => {
+    setTimeout(() => {
+        document.querySelector('#welcome-screen').style.display = 'none';
+    }, 2000);
+
     initGame();
 });
