@@ -57,13 +57,15 @@ var game = {
     }
 };
 
-var gameQuarter = 'Q1';
+var selectedQuarter = 'Q1';
 
-var playerUuid;
+// state values
+var selectedPlayer;
+var longPressInProgress;
 
 function playerClick(i) {
     if (i) {
-        playerUuid = i;
+        selectedPlayer = i;
     }
 
     // navigate to actions page
@@ -74,15 +76,15 @@ function playerClick(i) {
 
 function actionClick(a) {
     if (a) {
-        const p = { player: playerUuid, action: a };
+        const p = { player: selectedPlayer, action: a };
         // special case - forced foul will automatically log committed foul for opponent
         if (p.player != OPPONENT_UUID && p.action == Actions.FOUL_DRAWN.code) {
             const op = { player: OPPONENT_UUID, action: Actions.FOUL_COMMITTED.code };
-            game.plays[gameQuarter][generateUuid()] = op;
+            game.plays[selectedQuarter][generateUuid()] = op;
             updateFouls();
         }
 
-        game.plays[gameQuarter][generateUuid()] = p;
+        game.plays[selectedQuarter][generateUuid()] = p;
         updatePlayByPlay();
 
         switch (p.action) {
@@ -113,7 +115,7 @@ function updatePlayByPlay() {
     }
 
     // add play by play for the current quarter
-    for (const [pid, p] of Object.entries(game.plays[gameQuarter])) {
+    for (const [pid, p] of Object.entries(game.plays[selectedQuarter])) {
         var od = document.createElement('div');
         od.id = pid;
         var pd = document.createElement('div');
@@ -160,7 +162,7 @@ function updateScore() {
 function updateFouls() {
     // tally team fouls for the current quarter
     var tf = 0, of = 0;
-    for (const play of Object.values(game.plays[gameQuarter])) {
+    for (const play of Object.values(game.plays[selectedQuarter])) {
         if (play.player != OPPONENT_UUID) {
             tf += (play.action == Actions.FOUL_COMMITTED.code ? 1 : 0);
         } else {
@@ -186,14 +188,12 @@ function updateFouls() {
     }
 }
 
-const MAX_FOULS = 5;
-
 function setDots(parent, count) {
     var ds = parent.querySelectorAll('.dot');
     var i = 1;
     for (var d of ds) {
         if (i <= count) {
-            if (i == MAX_FOULS) {
+            if (i == 5) {
                 d.className = 'dot red';
             } else {
                 d.className = 'dot gold';
@@ -206,13 +206,18 @@ function setDots(parent, count) {
 }
 
 function initPlayers() {
+    // maximum 12 players
     if (Object.entries(players).length > 12) {
         return false;
     }
     var i = 0;
     for (const [uuid, p] of Object.entries(players)) {
         var pb = document.querySelector('.player-button:nth-of-type(' + (++i) + ')');
-        pb.addEventListener('click', (event) => { return playerClick(uuid); });
+        pb.addEventListener('click', (event) => {
+            if (!longPressInProgress) {
+                return playerClick(uuid);
+            }
+        });
         pb.id = uuid;
         var pbNumber = document.createElement('div');
         pbNumber.className = 'player-button-number';
@@ -259,6 +264,7 @@ function initActions() {
 function initGame() {
     initPlayers();
     initActions();
+
     // quarter selector
     var gqto;
     const gq = document.querySelector('#game-quarter');
@@ -272,7 +278,7 @@ function initGame() {
             for (const d of ds) {
                 if (Math.abs(d.offsetTop - st) < 1) {
                     // update quarter
-                    gameQuarter = d.id;
+                    selectedQuarter = d.id;
                     updatePlayByPlay();
                     updateFouls();
                     break;
@@ -299,7 +305,7 @@ function initGame() {
             y: event.changedTouches[0].clientY,
         };
         var click = function(event) {
-            delete game.plays[gameQuarter][e.id];
+            delete game.plays[selectedQuarter][e.id];
             updatePlayByPlay();
             updateScore();
             updateFouls();
@@ -340,9 +346,10 @@ function initGame() {
 
     // long press user handler
     var ubto;
-    const ubs = document.querySelectorAll('.player-button');
+    const ubs = document.querySelectorAll('.player-button:not(.opponent)');
     for (const ub of ubs) {
         ub.addEventListener('touchstart', (event) => {
+            longPressInProgress = true;
             ubto = setTimeout(() => {
                 // toggle substitute
                 if (event.target.parentNode.className.includes('bench')) {
@@ -354,6 +361,7 @@ function initGame() {
         });
         ub.addEventListener('touchend', (event) => {
             clearTimeout(ubto);
+            longPressInProgress = false;
         });
     }
 }
@@ -369,9 +377,5 @@ function initGame() {
 // PIR: (PTS + REB + AST + STL + BLK + FD) - (FGA-FGM) - (FTA-FTM) - TOV - FC)
 
 window.addEventListener('load', (event) => {
-    setTimeout(() => {
-        document.querySelector('#welcome-screen').style.display = 'none';
-    }, 2000);
-
     initGame();
 });

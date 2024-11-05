@@ -16,7 +16,7 @@ app {
     width:100vw;
 }
 
-#portrait-only, #welcome-screen {
+#portrait-only {
     align-content:center;
     height:100%;
     text-align:center;
