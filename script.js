@@ -23,6 +23,8 @@ const Actions = {
     FOUL_DRAWN: { code:'FD', text:'Foul Drawn' },
     TURNOVER: { code:'TOV', text:'Turnover' },
     BLOCK: { code:'BLK', text:'Block' },
+    // SUBSTITUTE_IN: { code:'IN', text:'Substitute In' },
+    // SUBSTITUTE_OUT: { code:'OUT', text:'Substitute Out' },
 };
 
 // TODO: should come from DB
@@ -234,21 +236,27 @@ function initPlayers() {
         }
         pb.appendChild(pbFouls);
 
-        pb.addEventListener('touchstart', (event) => {
-            longPressInProgress = false;
-            longPressTimeout = setTimeout(() => {
-                // toggle substitute
-                if (event.target.parentNode.className.includes('bench')) {
-                    event.target.parentNode.className = 'player-button';
-                } else {
-                    event.target.parentNode.className = 'player-button bench';
-                }
-                longPressInProgress = true;
-            }, 500);
-        });
-        pb.addEventListener('touchend', (event) => {
-            clearTimeout(longPressTimeout);
-        });
+        // pb.addEventListener('touchstart', (event) => {
+        //     longPressInProgress = false;
+        //     longPressTimeout = setTimeout(() => {
+        //         // toggle substitute
+        //         if (event.target.parentNode.className.includes('bench')) {
+        //             event.target.parentNode.className = 'player-button';
+        //             // const p = { player: uuid, action: Actions.SUBSTITUTE_IN.code };
+        //             // game.plays[selectedQuarter][generateUuid()] = p;
+        //             // updatePlayByPlay();
+        //         } else {
+        //             event.target.parentNode.className = 'player-button bench';
+        //             // const p = { player: uuid, action: Actions.SUBSTITUTE_OUT.code };
+        //             // game.plays[selectedQuarter][generateUuid()] = p;
+        //             // updatePlayByPlay();
+        //         }
+        //         longPressInProgress = true;
+        //     }, 500);
+        // });
+        // pb.addEventListener('touchend', (event) => {
+        //     clearTimeout(longPressTimeout);
+        // });
     }
 
     var pbo = document.querySelector('.player-button.opponent');
@@ -259,10 +267,12 @@ function initPlayers() {
 function initActions() {
     var i = 0;
     for (const a of Object.values(Actions)) {
-        var ab = document.querySelector('.action-button:nth-of-type(' + (++i) + ')');
-        ab.id = a.code;
-        ab.innerText = a.text;
-        ab.addEventListener('click', (event) => { return actionClick(event.target.id); });
+        var ab = document.querySelector('.action-button:nth-of-type(' + (++i) + '):not(.cancel)');
+        if (ab) {
+            ab.id = a.code;
+            ab.innerText = a.text;
+            ab.addEventListener('click', (event) => { return actionClick(event.target.id); });
+        }
     }
     var abc = document.querySelector('.action-button.cancel');
     abc.addEventListener('click', (event) => { return actionClick(); });
@@ -326,17 +336,17 @@ function initGame() {
             const dx = sc.x - mc.x;
             if (dx >= 0) {
                 e.style.left = -dx + 'px';
-                if (e.className === 'delete') {
-                    if (dx < e.clientWidth * 0.25) {
-                        e.removeEventListener('click', click);
-                        e.className = '';
-                    }
-                } else {
-                    if (dx >= e.clientWidth * 0.25) {
-                        e.addEventListener('click', click);
-                        e.className = 'delete';
-                    }
-                }
+                // if (e.className === 'delete') {
+                //     if (dx < e.clientWidth * 0.25) {
+                //         e.removeEventListener('click', click);
+                //         e.className = '';
+                //     }
+                // } else {
+                //     if (dx >= e.clientWidth * 0.25) {
+                //         e.addEventListener('click', click);
+                //         e.className = 'delete';
+                //     }
+                // }
             }
         };
         var touchEnd = function(event) {
@@ -344,6 +354,11 @@ function initGame() {
                 x: event.changedTouches[0].clientX,
                 y: event.changedTouches[0].clientY,
             };
+            const dx = sc.x - ec.x;
+            if (dx >= e.clientWidth * 0.25) {
+                e.addEventListener('click', click);
+                e.className = 'delete';
+            }
             e.style.left = 0;
             e.removeEventListener('touchmove', touchMove);
             e.removeEventListener('touchend', touchEnd);

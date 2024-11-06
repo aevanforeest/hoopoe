@@ -106,6 +106,7 @@ app {
 
 #game-play-by-play > div.delete {
     background-color:red;
+    transition:all 0.5s;
 }
 
 #game-play-by-play > div > div {
