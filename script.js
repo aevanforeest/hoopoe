@@ -62,6 +62,7 @@ var selectedQuarter = 'Q1';
 // state values
 var selectedPlayer;
 var longPressInProgress;
+var longPressTimeout;
 
 function playerClick(i) {
     if (i) {
@@ -133,11 +134,9 @@ function updatePlayByPlay() {
             }
         }
         od.appendChild(ad);
-        //pbp.appendChild(od);
         pbp.insertBefore(od, pbp.firstChild);
     }
 
-    //pbp.scrollTop = pbp.scrollHeight;
     pbp.scrollTop = 0;
 }
 
@@ -234,7 +233,24 @@ function initPlayers() {
             pbFouls.appendChild(pbFoul);
         }
         pb.appendChild(pbFouls);
+
+        pb.addEventListener('touchstart', (event) => {
+            longPressInProgress = false;
+            longPressTimeout = setTimeout(() => {
+                // toggle substitute
+                if (event.target.parentNode.className.includes('bench')) {
+                    event.target.parentNode.className = 'player-button';
+                } else {
+                    event.target.parentNode.className = 'player-button bench';
+                }
+                longPressInProgress = true;
+            }, 500);
+        });
+        pb.addEventListener('touchend', (event) => {
+            clearTimeout(longPressTimeout);
+        });
     }
+
     var pbo = document.querySelector('.player-button.opponent');
     pbo.addEventListener('click', (event) => { return playerClick(OPPONENT_UUID); });
     pbo.innerText = OPPONENT_NAME;
@@ -245,14 +261,6 @@ function initActions() {
     for (const a of Object.values(Actions)) {
         var ab = document.querySelector('.action-button:nth-of-type(' + (++i) + ')');
         ab.id = a.code;
-        // var abCode = document.createElement('div');
-        // abCode.className = 'action-button-code';
-        // abCode.innerText = a.uuid;
-        // ab.appendChild(abCode);
-        // var abText = document.createElement('div');
-        // abText.className = 'action-button-text';
-        // abText.innerText = a.text;
-        // ab.appendChild(abText);
         ab.innerText = a.text;
         ab.addEventListener('click', (event) => { return actionClick(event.target.id); });
     }
@@ -343,27 +351,6 @@ function initGame() {
         e.addEventListener('touchmove', touchMove);
         e.addEventListener('touchend', touchEnd);
     });
-
-    // long press user handler
-    var ubto;
-    const ubs = document.querySelectorAll('.player-button:not(.opponent)');
-    for (const ub of ubs) {
-        ub.addEventListener('touchstart', (event) => {
-            longPressInProgress = true;
-            ubto = setTimeout(() => {
-                // toggle substitute
-                if (event.target.parentNode.className.includes('bench')) {
-                    event.target.parentNode.className = 'player-button';
-                } else {
-                    event.target.parentNode.className = 'player-button bench';
-                }
-            }, 500);
-        });
-        ub.addEventListener('touchend', (event) => {
-            clearTimeout(ubto);
-            longPressInProgress = false;
-        });
-    }
 }
 
 // FGM FGA FG%
