@@ -1,1 +1,62 @@
-
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+        <link rel="stylesheet" href="style.css" />
+        <title>Baller</title>
+    </head>
+    <body>
+        <div class="container">
+            <div class="modals">
+                <div id="modal-player" class="modal">
+                    Name
+                    Number
+                    OK
+                    <a href="#" onclick="closeModal();">Cancel</a>
+                </div>
+            </div>
+            <div class="pages">
+                <div id="page-players" class="page">
+                    <div class="page-header" onclick="openModal();">PLAYERS</div>
+                    <!-- add new player button -->
+                    <!-- click player to edit -->
+                    <!-- slide player to delete -->
+                    <ul id="player-list">
+                    </ul>
+                </div>
+                <div id="page-teams" class="page">
+                    <div class="page-header">TEAMS</div>
+                    <ul id="team-list">
+                    </ul>
+                </div>
+                <div id="page-games" class="page">
+                    <div class="page-header">GAMES</div>
+                </div>
+                <div id="page-stats" class="page">
+                    <div class="page-header">STATS</div>
+                </div>
+            </div>
+            <div class="menu-items">
+                <div id="menu-item-players" onclick="slide('players');" class="menu-item active">
+                    <i class="bx bx-user"></i>
+                    Players
+                </div>
+                <div id="menu-item-teams" onclick="slide('teams');" class="menu-item">
+                    <i class="bx bx-table"></i>
+                    Teams
+                </div>
+                <div id="menu-item-games" onclick="slide('games');" class="menu-item">
+                    <i class="bx bx-basketball"></i>
+                    Games
+                </div>
+                <div id="menu-item-stats" onclick="slide('stats');" class="menu-item">
+                    <i class="bx bx-line-chart"></i>
+                    Stats
+                </div>
+            </div>
+        </div>
+        <script src="script.js"></script>
+    </body>
+</html>
