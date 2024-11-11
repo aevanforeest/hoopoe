@@ -1,5 +1,6 @@
 /* database ******************************************************************/
 
+// TODO: database
 const players = {
     'd72fba2e-2855-4b82-aa49-612ee5e13a9a': { number:4, name:'David' },
     'd72fba2e-2855-4b82-aa49-612ee5e13a9b': { number:5, name:'Boris' },
@@ -12,8 +13,10 @@ const players = {
     'd72fba2e-2855-4b82-aa49-612ee5e13aa2': { number:12, name:'Jonathan' },
     'd72fba2e-2855-4b82-aa49-612ee5e13aa3': { number:13, name:'Imme' },
     'd72fba2e-2855-4b82-aa49-612ee5e13aa4': { number:15, name:'Filippo' },
+    // 'd72fba2e-2855-4b82-aa49-612ee5e13aa5': { number:5, name:'Casper' },
 };
 
+// TODO: database
 const teams = {
     'd72fba2e-2855-4b82-aa49-612ee5e13aa5': {
         name:'ZZ Leiden M12-1',
@@ -23,10 +26,23 @@ const teams = {
             'd72fba2e-2855-4b82-aa49-612ee5e13a9c',
             'd72fba2e-2855-4b82-aa49-612ee5e13a9d',
             'd72fba2e-2855-4b82-aa49-612ee5e13a9e',
+            'd72fba2e-2855-4b82-aa49-612ee5e13a9f',
+            'd72fba2e-2855-4b82-aa49-612ee5e13aa0',
+            'd72fba2e-2855-4b82-aa49-612ee5e13aa1',
+            'd72fba2e-2855-4b82-aa49-612ee5e13aa2',
+            'd72fba2e-2855-4b82-aa49-612ee5e13aa3',
+            'd72fba2e-2855-4b82-aa49-612ee5e13aa4',
         ]
     },
-    'd72fba2e-2855-4b82-aa49-612ee5e13aa6': { name:'BS Leiden M16-3', players:[] },
+    'd72fba2e-2855-4b82-aa49-612ee5e13aa6': {
+        name:'BS Leiden M16-3',
+        players:[
+            // 'd72fba2e-2855-4b82-aa49-612ee5e13aa5',
+        ]
+    },
 };
+
+const SWIPE_TO_DELETE = 0.60;
 
 /* generic functions *********************************************************/
 
@@ -55,12 +71,18 @@ function slideToPage(page) {
     if (n) { n.classList.toggle('active'); }
 }
 
-// use open and close instead of toggle?
-function toggleModal(modal) {
+function showModal(modal) {
     const mc = document.querySelector('.modal-container');
-    if (mc) { mc.classList.toggle('visible'); }
+    mc.classList.add('visible');
     const m = document.querySelector('#modal-' + modal);
-    if (m) { m.classList.toggle('visible'); }
+    m.classList.add('visible');
+}
+
+function hideModal(modal) {
+    const mc = document.querySelector('.modal-container');
+    mc.classList.remove('visible');
+    const m = document.querySelector('#modal-' + modal);
+    m.classList.remove('visible');
 }
 
 /* players *******************************************************************/
@@ -107,28 +129,28 @@ function openPlayerModal(uuid) {
     document.querySelector('#player-uuid').value = uuid;
     document.querySelector('#player-name').value = players[uuid].name;
     document.querySelector('#player-number').value = players[uuid].number;
-    toggleModal('player');
+    showModal('player');
 }
 
-function okPlayerModal(event) {
-    const uuid = document.querySelector('#player-uuid').value;
-    players[uuid].name = document.querySelector('#player-name').value;
-    players[uuid].number = document.querySelector('#player-number').value;
-    // TODO: save changes and update player list
-    initPlayerList();
-    toggleModal('player');
-}
-
-function cancelPlayerModal(event) {
-    toggleModal('player');
+function closePlayerModal(save) {
+    if (save) {
+        const uuid = document.querySelector('#player-uuid').value;
+        const player = players[uuid];
+        player.name = document.querySelector('#player-name').value;
+        player.number = document.querySelector('#player-number').value;
+        // TODO: database
+        initPlayerList();
+    }
+    hideModal('player');
 }
 
 function swipePlayer(event) {
     const sc = event.target.parentNode;
     const uuid = sc.id;
-    if (sc.scrollLeft > sc.clientWidth * 0.70) {
-        console.log("TODO: delete player: " + uuid);
+    if (sc.scrollLeft > sc.clientWidth * SWIPE_TO_DELETE) {
         event.target.parentNode.remove();
+        delete players[uuid];
+        // TODO: database
     }
 }
 
@@ -194,37 +216,80 @@ function openTeamModal(uuid) {
         d.appendChild(l);
         teamPlayerList.appendChild(d);
     }
-    toggleModal('team');
+    showModal('team');
 }
 
-function okTeamModal(event) {
-    const uuid = document.querySelector('#team-uuid').value;
-    teams[uuid].name = document.querySelector('#team-name').value;
-
-    // TODO: save changes and update team list
-
-    const team = teams[uuid];
-    team.players = [];
-    for (const [uuid, player] of Object.entries(players)) {
-        const i = document.querySelector('input[type="checkbox"][id="' + uuid + '"]');
-        if (i.checked) {
-            team.players.push(uuid);
+function closeTeamModal(save) {
+    if (save) {
+        const uuid = document.querySelector('#team-uuid').value;
+        const team = teams[uuid];
+        team.name = document.querySelector('#team-name').value;
+        team.players = [];
+        for (const [uuid, player] of Object.entries(players)) {
+            const i = document.querySelector('input[type="checkbox"][id="' + uuid + '"]');
+            if (i.checked) {
+                team.players.push(uuid);
+            }
         }
+        initTeamList();
     }
-
-    initTeamList();
-    toggleModal('team');
-}
-
-function cancelTeamModal(event) {
-    toggleModal('team');
+    hideModal('team');
 }
 
 function swipeTeam(event) {
     const sc = event.target.parentNode;
     const uuid = sc.id;
-    if (sc.scrollLeft > sc.clientWidth * 0.70) {
-        console.log("TODO: delete team: " + uuid);
+    if (sc.scrollLeft > sc.clientWidth * SWIPE_TO_DELETE) {
+        event.target.parentNode.remove();
+        delete teams[uuid];
+    }
+}
+
+/* games *********************************************************************/
+
+function initGameList() {
+    const gameList = document.querySelector('#game-list');
+    while (gameList.hasChildNodes()) {
+        gameList.removeChild(gameList.firstChild);
+    }
+    // for (const [uuid, game] of Object.entries(games)) {
+    //     const sc = document.createElement('div');
+    //     sc.classList.add('swipe-container');
+    //     sc.id = uuid;
+    //     const si = document.createElement('div');
+    //     si.classList.add('swipe-item');
+    //     si.innerText = game.name;
+    //     sc.appendChild(si);
+    //     const sa = document.createElement('div');
+    //     sa.classList.add('swipe-action');
+    //     const ia = document.createElement('i');
+    //     ia.classList.add('bx', 'bx-arrow-to-left');
+    //     sa.appendChild(ia);
+    //     const it = document.createElement('i');
+    //     it.classList.add('bx', 'bx-trash');
+    //     sa.appendChild(it);
+    //     sc.appendChild(sa);
+    //     gameList.appendChild(sc);
+    // }
+}
+
+function addGame(event) {
+    const uuid = generateUuid();
+    // game[uuid] = { name:'', players:[] };
+    // openGameModal(uuid);
+}
+
+function editGame(event) {
+    const sc = event.target.parentNode;
+    // const uuid = sc.id;
+    // openGameModal(uuid);
+}
+
+function swipeGame(event) {
+    const sc = event.target.parentNode;
+    const uuid = sc.id;
+    if (sc.scrollLeft > sc.clientWidth * SWIPE_TO_DELETE) {
+        console.log("TODO: delete game: " + uuid);
         event.target.parentNode.remove();
     }
 }

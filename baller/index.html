@@ -34,6 +34,7 @@
                         GAMES
                         <div onclick="addGame(event);"><i class="bx bx-plus-circle"></i></div>
                     </div>
+                    <div id="game-list" class="swipe-list" onclick="editGame(event);" ontouchend="swipeGame(event);"></div>
                 </div>
                 <div id="page-stats" class="page">
                     <div class="page-header">STATS</div>
@@ -42,20 +43,20 @@
             <div class="modal-container">
                 <div id="modal-player" class="modal">
                     <input id="player-uuid" type="hidden" />
-                    <div>Name: <input id="player-name" type="text" /></div>
-                    <div>Number: <input id="player-number" type="text" inputmode="numeric" maxlength="2" /></div>
+                    <div>Player Name:<br /><input id="player-name" type="text" /></div>
+                    <div>Player Number:<br /><input id="player-number" type="text" inputmode="numeric" maxlength="2" /></div>
                     <div class="button-container">
-                        <div class="button" onclick="okPlayerModal(event);">OK</div>
-                        <div class="button" onclick="cancelPlayerModal(event);">Cancel</div>
+                        <div class="button" onclick="closePlayerModal(true);">OK</div>
+                        <div class="button" onclick="closePlayerModal(false);">Cancel</div>
                     </div>
                 </div>
                 <div id="modal-team" class="modal">
                     <input id="team-uuid" type="hidden" />
-                    <div><input id="team-name" type="text" /></div>
+                    <div>Team Name:<br /><input id="team-name" type="text" /></div>
                     <div id="team-player-list"></div>
                     <div class="button-container">
-                        <div class="button" onclick="okTeamModal(event);">OK</div>
-                        <div class="button" onclick="cancelTeamModal(event);">Cancel</div>
+                        <div class="button" onclick="closeTeamModal(true);">OK</div>
+                        <div class="button" onclick="closeTeamModal(false);">Cancel</div>
                     </div>
                 </div>
             </div>
