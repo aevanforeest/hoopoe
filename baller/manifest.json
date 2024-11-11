@@ -5,8 +5,8 @@
     "start_url": "/hoopoe/baller/?standalone=true",
     "display": "standalone",
     "orientation": "portrait",
-    "background_color": "#f5f5dc",
-    "theme_color": "#f5f5dc",
+    "background_color": "#ffffff",
+    "theme_color": "#ffffff",
     "icons": [
         {
             "src": "/hoopoe/baller/img/icon-512x512.png",
