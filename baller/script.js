@@ -51,7 +51,7 @@ function slideToPage(page) {
     }
     const na = document.querySelector('.menu-item.active');
     if (na) { na.classList.toggle('active'); }
-    const n = document.querySelector('#menu-item-' + page);
+    const n = document.querySelector('#menu-' + page);
     if (n) { n.classList.toggle('active'); }
 }
 
@@ -182,15 +182,17 @@ function openTeamModal(uuid) {
         teamPlayerList.removeChild(teamPlayerList.firstChild);
     }
     for (const [uuid, player] of Object.entries(players)) {
+        const d = document.createElement('div');
         const i = document.createElement('input');
         i.setAttribute('id', uuid);
         i.setAttribute('type', 'checkbox');
         i.checked = team.players.includes(uuid);
-        teamPlayerList.appendChild(i);
+        d.appendChild(i);
         const l = document.createElement('label');
         l.setAttribute('for', uuid);
         l.innerText = player.name;
-        teamPlayerList.appendChild(l);
+        d.appendChild(l);
+        teamPlayerList.appendChild(d);
     }
     toggleModal('team');
 }
@@ -198,7 +200,18 @@ function openTeamModal(uuid) {
 function okTeamModal(event) {
     const uuid = document.querySelector('#team-uuid').value;
     teams[uuid].name = document.querySelector('#team-name').value;
+
     // TODO: save changes and update team list
+
+    const team = teams[uuid];
+    team.players = [];
+    for (const [uuid, player] of Object.entries(players)) {
+        const i = document.querySelector('input[type="checkbox"][id="' + uuid + '"]');
+        if (i.checked) {
+            team.players.push(uuid);
+        }
+    }
+
     initTeamList();
     toggleModal('team');
 }
