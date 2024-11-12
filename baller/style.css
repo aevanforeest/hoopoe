@@ -11,12 +11,15 @@
 body {
     background-color:white;
     margin:var(--header-height 0 0 0);
+    user-select:none;
+    -webkit-user-select:none;
 }
 
 .container {
-    width:100vw;
     height:100vh;
+    position:fixed;
     overflow:hidden;
+    width:100vw;
 }
 
 .page-container {
@@ -153,11 +156,9 @@ body {
 }
 
 .swipe-item {
-    scroll-snap-align:start;
-}
-
-.swipe-item {
     min-width:100%;
+    scroll-snap-align:start;
+
 }
 
 .swipe-action {

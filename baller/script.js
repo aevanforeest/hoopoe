@@ -13,7 +13,9 @@ const players = {
     'd72fba2e-2855-4b82-aa49-612ee5e13aa2': { number:12, name:'Jonathan' },
     'd72fba2e-2855-4b82-aa49-612ee5e13aa3': { number:13, name:'Imme' },
     'd72fba2e-2855-4b82-aa49-612ee5e13aa4': { number:15, name:'Filippo' },
-    // 'd72fba2e-2855-4b82-aa49-612ee5e13aa5': { number:5, name:'Casper' },
+    'd72fba2e-2855-4b82-aa49-612ee5e13aa5': { number:14, name:'Dennis' },
+    'd72fba2e-2855-4b82-aa49-612ee5e13aa6': { number:14, name:'Jip' },
+    'd72fba2e-2855-4b82-aa49-612ee5e13aa7': { number:14, name:'Lucas' },
 };
 
 // TODO: database
@@ -32,15 +34,49 @@ const teams = {
             'd72fba2e-2855-4b82-aa49-612ee5e13aa2',
             'd72fba2e-2855-4b82-aa49-612ee5e13aa3',
             'd72fba2e-2855-4b82-aa49-612ee5e13aa4',
-        ]
+        ],
     },
     'd72fba2e-2855-4b82-aa49-612ee5e13aa6': {
         name:'BS Leiden M16-3',
         players:[
-            // 'd72fba2e-2855-4b82-aa49-612ee5e13aa5',
-        ]
+        ],
     },
 };
+
+const games = {
+    'd72fba2e-2855-4b82-aa49-612ee5e13aa7': {
+        team:'d72fba2e-2855-4b82-aa49-612ee5e13aa5',
+        opponent:'Lokomotief M12-1',
+        home:true,
+        date:'2024-11-10',
+        plays:{
+            'Q1': {
+                'd72fba2e-2855-4b82-aa49-612ee5e13aa8': {
+                    player:'',
+                    play:'2PM',
+                },
+            },
+            'Q2': {
+
+            }
+        }
+    },
+};
+
+const PLAY_2_POINTS_MADE = { key:'2PM' };
+const PLAY_2_POINTS_MISSED = { key:'2P-' };
+const PLAY_3_POINTS_MADE = { key:'3PM' };
+const PLAY_3_POINTS_MISSED = { key:'3P-' };
+const PLAY_FREE_THROW_MADE = { key:'FTM' };
+const PLAY_FREE_THROW_MISSED = { key:'FT-' };
+const PLAY_OFFENSIVE_REBOUND = { key:'ORB' };
+const PLAY_DEFENSIVE_REBOUND = { key:'DRB' };
+const PLAY_FOUL_COMMITTED = { key:'FLC' };
+const PLAY_FOUL_DRAWN = { key:'FLD' };
+const PLAY_ASSIST = { key:'AST' };
+const PLAY_STEAL = { key:'STL' };
+const PLAY_TURNOVER = { key:'TOV' };
+const PLAY_BLOCK = { key:'BLK' };
 
 const SWIPE_TO_DELETE = 0.60;
 
@@ -92,13 +128,19 @@ function initPlayerList() {
     while (playerList.hasChildNodes()) {
         playerList.removeChild(playerList.firstChild);
     }
-    for (const [uuid, player] of Object.entries(players)) {
+
+    // sorted by player number
+    Object.keys(players).sort(function(a, b) {
+        return players[a].number - players[b].number;
+    }).forEach((uuid) => {
+        const player = players[uuid];
+    // for (const [uuid, player] of Object.entries(players)) {
         const sc = document.createElement('div');
         sc.classList.add('swipe-container');
         sc.id = uuid;
         const si = document.createElement('div');
         si.classList.add('swipe-item');
-        si.innerText = player.number + ' ' + player.name;
+        si.innerText = player.name + ' (' + player.number + ')';
         sc.appendChild(si);
         const sa = document.createElement('div');
         sa.classList.add('swipe-action');
@@ -110,7 +152,8 @@ function initPlayerList() {
         sa.appendChild(it);
         sc.appendChild(sa);
         playerList.appendChild(sc);
-    }
+    // }
+    });
 }
 
 function addPlayer(event) {
@@ -203,7 +246,13 @@ function openTeamModal(uuid) {
     while (teamPlayerList.hasChildNodes()) {
         teamPlayerList.removeChild(teamPlayerList.firstChild);
     }
-    for (const [uuid, player] of Object.entries(players)) {
+
+    // sorted by player number
+    Object.keys(players).sort(function(a, b) {
+        return players[a].number - players[b].number;
+    }).forEach((uuid) => {
+        const player = players[uuid];
+    // for (const [uuid, player] of Object.entries(players)) {
         const d = document.createElement('div');
         const i = document.createElement('input');
         i.setAttribute('id', uuid);
@@ -212,10 +261,12 @@ function openTeamModal(uuid) {
         d.appendChild(i);
         const l = document.createElement('label');
         l.setAttribute('for', uuid);
-        l.innerText = player.name;
+        l.innerText = player.name + ' (' + player.number + ')';
         d.appendChild(l);
         teamPlayerList.appendChild(d);
-    }
+    // }
+    });
+
     showModal('team');
 }
 
@@ -252,25 +303,35 @@ function initGameList() {
     while (gameList.hasChildNodes()) {
         gameList.removeChild(gameList.firstChild);
     }
+
+    // sorted by game date
+    Object.keys(games).sort(function(a, b) {
+        return games[a].date - games[b].date;
+    }).forEach((uuid) => {
+        const game = games[uuid];
     // for (const [uuid, game] of Object.entries(games)) {
-    //     const sc = document.createElement('div');
-    //     sc.classList.add('swipe-container');
-    //     sc.id = uuid;
-    //     const si = document.createElement('div');
-    //     si.classList.add('swipe-item');
-    //     si.innerText = game.name;
-    //     sc.appendChild(si);
-    //     const sa = document.createElement('div');
-    //     sa.classList.add('swipe-action');
-    //     const ia = document.createElement('i');
-    //     ia.classList.add('bx', 'bx-arrow-to-left');
-    //     sa.appendChild(ia);
-    //     const it = document.createElement('i');
-    //     it.classList.add('bx', 'bx-trash');
-    //     sa.appendChild(it);
-    //     sc.appendChild(sa);
-    //     gameList.appendChild(sc);
+        const sc = document.createElement('div');
+        sc.classList.add('swipe-container');
+        sc.id = uuid;
+        const si = document.createElement('div');
+        si.classList.add('swipe-item');
+        si.innerText =
+            teams[game.team].name +
+            (game.home ? ' vs ' : ' @ ') +
+            game.opponent;
+        sc.appendChild(si);
+        const sa = document.createElement('div');
+        sa.classList.add('swipe-action');
+        const ia = document.createElement('i');
+        ia.classList.add('bx', 'bx-arrow-to-left');
+        sa.appendChild(ia);
+        const it = document.createElement('i');
+        it.classList.add('bx', 'bx-trash');
+        sa.appendChild(it);
+        sc.appendChild(sa);
+        gameList.appendChild(sc);
     // }
+    });
 }
 
 function addGame(event) {
@@ -299,4 +360,5 @@ function swipeGame(event) {
 window.addEventListener('load', (event) => {
     initPlayerList();
     initTeamList();
+    initGameList();
 });
