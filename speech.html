@@ -1,11 +1,13 @@
 <html>
     <head>
         <style text="text/css">
+        body {
+            font:normal 16pt sans-serif;
+        }
         #listen {
             background-color:white;
             border:1px solid black;
             color:black;
-            font:normal 24pt sans-serif;
         }
         #listen.active {
             background-color:red;
@@ -214,7 +216,7 @@
                         for (var i = 0; i < queue.length && i < 3; i++) {
                             w += ' ' + queue[i];
                         }
-                        log("NOT EXPECTED:" + la);
+                        log("LOOK AHEAD:" + la);
                     }
                 }
 
