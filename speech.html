@@ -1,0 +1,266 @@
+<html>
+    <head>
+        <style text="text/css">
+        #listen {
+            background-color:white;
+            border:1px solid black;
+            color:black;
+        }
+        #listen.active {
+            background-color:red;
+            color:white;
+        }
+        </style>
+    </head>
+    <body>
+        <div id="listen" onclick="listen(event);">LISTEN</div>
+        <div id="log"></div>
+        <script type="text/javascript">
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        // const SpeechRecognitionEvent = window.SpeechRecognitionEvent || window.webkitSpeechRecognitionEvent;
+        const recognition = new SpeechRecognition();
+        recognition.continuous = true;
+        // recognition.lang = "en-US";
+        // recognition.interimResults = false;
+        // recognition.maxAlternatives = 1;
+
+        var listening = false;
+        function listen(event) {
+            if (!listening) {
+                recognition.start();
+            } else {
+                recognition.stop();
+            }
+            listening = !listening;
+            event.target.classList.toggle("active");
+        }
+
+        var queue = [];
+        recognition.onresult = (event) => {
+            const n = event.results.length;
+            const t = event.results[n - 1][0].transcript;
+            t.split(' ').forEach(w => { queue.push(w.toLowerCase()); });
+            processQueue();
+        };
+
+        // recognition.onnomatch = (event) => {
+        // };
+
+        // recognition.onerror = (event) => {
+        // };
+
+        // recognition.onspeechend = () => {
+        // };
+        const numbers = {
+            'zero': 0,
+            'one': 1,
+            'two': 2,
+            'three': 3,
+            'four': 4,
+            'five': 5,
+            'six': 6,
+            'seven': 7,
+            'eight': 8,
+            'nine': 9,
+        };
+
+        function log(m) {
+            console.log(m);
+            const l = document.querySelector('#log');
+            const d = document.createElement('div');
+            d.innerText = m;
+            l.appendChild(d);
+        }
+
+        var play;
+        function setPlay(p) {
+            if (play !== undefined) {
+                log("NOT PROCESSED: " + play);
+            }
+            play = p;
+        }
+
+        var player;
+        function setPlayer(p) {
+            if (player !== undefined) {
+                log("NOT PROCESSED: " + p);
+            }
+            player = p;
+        }
+
+        function processQueue() {
+            while (queue.length > 0) {
+                if (queue.length > 2 &&
+                    // 2-point
+                    // [2 | two] [points | point] [made | mate | may]
+                    ['2','two'].includes(queue[0]) &&
+                    ['points','point'].includes(queue[1]) &&
+                    ['made','mate','may'].includes(queue[2])) {
+                    // 2 points made
+                    setPlay('2 points made');
+                    // console.log("2 points made");
+                    queue.shift();
+                    queue.shift();
+                    queue.shift();
+                } else if (queue.length > 0 &&
+                    ['2.8'].includes(queue[0])) {
+                    // 2 points made
+                    setPlay('2 points made');
+                    // console.log("2 points made");
+                    queue.shift();
+                } else if (queue.length > 2 &&
+                    ['2','two'].includes(queue[0]) &&
+                    ['points','point'].includes(queue[1]) &&
+                    ['missed','mist'].includes(queue[2])) {
+                    // 2 points missed
+                    setPlay('2 points missed');
+                    // console.log("2 points missed");
+                    queue.shift();
+                    queue.shift();
+                    queue.shift();
+                } else if (queue.length > 2 &&
+                    // 3-point
+                    ['3','three','tree'].includes(queue[0]) &&
+                    ['points','point'].includes(queue[1]) &&
+                    ['made','mate','may'].includes(queue[2])) {
+                    // 3 points made
+                    setPlay('3 points made');
+                    // console.log("3 points made");
+                    queue.shift();
+                    queue.shift();
+                    queue.shift();
+                } else if (queue.length > 0 &&
+                    ['3.8'].includes(queue[0])) {
+                    // 3 points made
+                    setPlay('3 points made');
+                    // console.log("3 points made");
+                    queue.shift();
+                } else if (queue.length > 2 &&
+                    ['3','three','tree'].includes(queue[0]) &&
+                    ['points','point'].includes(queue[1]) &&
+                    ['missed','mist'].includes(queue[2])) {
+                    // 3 points missed
+                    setPlay('3 points missed');
+                    // console.log("3 points missed");
+                    queue.shift();
+                    queue.shift();
+                    queue.shift();
+                } else if (queue.length > 2 &&
+                    ['free'].includes(queue[0]) &&
+                    ['throw','throws'].includes(queue[1]) &&
+                    ['made'].includes(queue[2])) {
+                    // free throw made
+                    setPlay('free throw made');
+                    // console.log("free throw made");
+                    queue.shift();
+                    queue.shift();
+                    queue.shift();
+                } else if (queue.length > 2 &&
+                    ['free'].includes(queue[0]) &&
+                    ['throw','throws'].includes(queue[1]) &&
+                    ['missed','mist'].includes(queue[2])) {
+                    // free throw missed
+                    setPlay('free throw missed');
+                    // console.log("free throw missed");
+                    queue.shift();
+                    queue.shift();
+                    queue.shift();
+                } else if (queue.length > 1 &&
+                    ['offensive','authentic'].includes(queue[0]) &&
+                    ['rebound'].includes(queue[1])) {
+                    // offensive rebound
+                    setPlay('offensive rebound');
+                    // console.log("offensive rebound");
+                    queue.shift();
+                    queue.shift();
+                } else if (queue.length > 1 &&
+                    ['defensive'].includes(queue[0]) &&
+                    ['rebound'].includes(queue[1])) {
+                    // defensive rebound
+                    setPlay('defensive rebound');
+                    // console.log("defensive rebound");
+                    queue.shift();
+                    queue.shift();
+                } else if (queue.length > 1 &&
+                    ['foul','file'].includes(queue[0]) &&
+                    ['committed','made'].includes(queue[1])) {
+                    // foul committed
+                    setPlay('foul committed');
+                    // console.log("foul committed");
+                    queue.shift();
+                    queue.shift();
+                } else if (queue.length > 1 &&
+                    ((['foul','file'].includes(queue[0]) &&
+                    ['drawn'].includes(queue[1])) ||
+                    ((['forced'].includes(queue[0]) &&
+                    ['foul'].includes(queue[1]))))) {
+                    // foul drawn
+                    setPlay('foul drawn');
+                    // console.log("foul drawn");
+                    queue.shift();
+                    queue.shift();
+                } else if (queue.length > 0 &&
+                    ['assist','system'].includes(queue[0])) {
+                    // assist
+                    setPlay('assist');
+                    // console.log("assist");
+                    queue.shift();
+                } else if (queue.length > 0 &&
+                    ['steal','steel','still'].includes(queue[0])) {
+                    // steal
+                    setPlay('steal');
+                    // console.log("steal");
+                    queue.shift();
+                } else if (queue.length > 1 &&
+                    ['turn','turns'].includes(queue[0]) &&
+                    ['over'].includes(queue[1])) {
+                    // turnover
+                    setPlay('turnover');
+                    // console.log("turnover");
+                    queue.shift();
+                    queue.shift();
+                } else if (queue.length > 0 &&
+                    ['turnover'].includes(queue[0])) {
+                    // turnover
+                    setPlay('turnover');
+                    // console.log("turnover");
+                    queue.shift();
+                } else if (queue.length > 0 &&
+                    ['block','blocks'].includes(queue[0])) {
+                    // block
+                    setPlay('block');
+                    // console.log("block");
+                    queue.shift();
+                } else if (queue.length > 1 &&
+                    ['number'].includes(queue[0])) {
+                    if (/^\d\d?$/.test(queue[1])) {
+                        setPlayer(queue[1]);
+                        // console.log('number ' + player);
+                    } else if (numbers[queue[1]] !== undefined) {
+                        setPlayer(numbers[queue[1]]);
+                        // console.log('number ' + player);
+                    } else {
+                        log('NOT A NUMBER: ' + queue[1]);
+                    }
+                    queue.shift();
+                    queue.shift();
+                } else {
+                    const w = queue.shift();
+                    if (w !== '') {
+                        log("NOT EXPECTED: " + w);
+                    }
+                }
+
+                if (player !== undefined) {
+                    if (play !== undefined) {
+                        log(play + ' number ' + player);
+                    } else {
+                        log("NO PLAY FOR PLAYER: " + player);
+                    }
+                    play = player = undefined;
+                }
+            }
+        }
+        </script>
+    </body>
+</html>
