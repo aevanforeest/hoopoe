@@ -5,6 +5,7 @@
             background-color:white;
             border:1px solid black;
             color:black;
+            font:normal 24pt sans-serif;
         }
         #listen.active {
             background-color:red;
@@ -91,67 +92,50 @@
         function processQueue() {
             while (queue.length > 0) {
                 if (queue.length > 2 &&
-                    // 2-point
-                    // [2 | two] [points | point] [made | mate | may]
                     ['2','two'].includes(queue[0]) &&
                     ['points','point'].includes(queue[1]) &&
                     ['made','mate','may'].includes(queue[2])) {
-                    // 2 points made
                     setPlay('2 points made');
-                    // console.log("2 points made");
+                    queue.shift();
+                    queue.shift();
+                    queue.shift();
+                } else if (queue.length > 2 &&
+                    ['2','two'].includes(queue[0]) &&
+                    ['points','point'].includes(queue[1]) &&
+                    ['missed','mist'].includes(queue[2])) {
+                    setPlay('2 points missed');
                     queue.shift();
                     queue.shift();
                     queue.shift();
                 } else if (queue.length > 0 &&
                     ['2.8'].includes(queue[0])) {
-                    // 2 points made
                     setPlay('2 points made');
-                    // console.log("2 points made");
                     queue.shift();
                 } else if (queue.length > 2 &&
-                    ['2','two'].includes(queue[0]) &&
-                    ['points','point'].includes(queue[1]) &&
-                    ['missed','mist'].includes(queue[2])) {
-                    // 2 points missed
-                    setPlay('2 points missed');
-                    // console.log("2 points missed");
-                    queue.shift();
-                    queue.shift();
-                    queue.shift();
-                } else if (queue.length > 2 &&
-                    // 3-point
                     ['3','three','tree'].includes(queue[0]) &&
                     ['points','point'].includes(queue[1]) &&
                     ['made','mate','may'].includes(queue[2])) {
-                    // 3 points made
                     setPlay('3 points made');
-                    // console.log("3 points made");
+                    queue.shift();
+                    queue.shift();
+                    queue.shift();
+                } else if (queue.length > 2 &&
+                    ['3','three','tree'].includes(queue[0]) &&
+                    ['points','point'].includes(queue[1]) &&
+                    ['missed','mist'].includes(queue[2])) {
+                    setPlay('3 points missed');
                     queue.shift();
                     queue.shift();
                     queue.shift();
                 } else if (queue.length > 0 &&
                     ['3.8'].includes(queue[0])) {
-                    // 3 points made
                     setPlay('3 points made');
-                    // console.log("3 points made");
-                    queue.shift();
-                } else if (queue.length > 2 &&
-                    ['3','three','tree'].includes(queue[0]) &&
-                    ['points','point'].includes(queue[1]) &&
-                    ['missed','mist'].includes(queue[2])) {
-                    // 3 points missed
-                    setPlay('3 points missed');
-                    // console.log("3 points missed");
-                    queue.shift();
-                    queue.shift();
                     queue.shift();
                 } else if (queue.length > 2 &&
                     ['free'].includes(queue[0]) &&
                     ['throw','throws'].includes(queue[1]) &&
                     ['made'].includes(queue[2])) {
-                    // free throw made
                     setPlay('free throw made');
-                    // console.log("free throw made");
                     queue.shift();
                     queue.shift();
                     queue.shift();
@@ -159,86 +143,64 @@
                     ['free'].includes(queue[0]) &&
                     ['throw','throws'].includes(queue[1]) &&
                     ['missed','mist'].includes(queue[2])) {
-                    // free throw missed
                     setPlay('free throw missed');
-                    // console.log("free throw missed");
                     queue.shift();
                     queue.shift();
                     queue.shift();
                 } else if (queue.length > 1 &&
                     ['offensive','authentic'].includes(queue[0]) &&
                     ['rebound'].includes(queue[1])) {
-                    // offensive rebound
                     setPlay('offensive rebound');
-                    // console.log("offensive rebound");
                     queue.shift();
                     queue.shift();
                 } else if (queue.length > 1 &&
                     ['defensive'].includes(queue[0]) &&
                     ['rebound'].includes(queue[1])) {
-                    // defensive rebound
                     setPlay('defensive rebound');
-                    // console.log("defensive rebound");
                     queue.shift();
                     queue.shift();
                 } else if (queue.length > 1 &&
-                    ['foul','file'].includes(queue[0]) &&
+                    ['foul','file','fowl'].includes(queue[0]) &&
                     ['committed','made'].includes(queue[1])) {
-                    // foul committed
                     setPlay('foul committed');
-                    // console.log("foul committed");
                     queue.shift();
                     queue.shift();
                 } else if (queue.length > 1 &&
-                    ((['foul','file'].includes(queue[0]) &&
-                    ['drawn'].includes(queue[1])) ||
-                    ((['forced'].includes(queue[0]) &&
-                    ['foul'].includes(queue[1]))))) {
-                    // foul drawn
+                    ((['foul','file','fowl'].includes(queue[0]) &&
+                    ['drawn','drone'].includes(queue[1])) ||
+                    ((['forced','first'].includes(queue[0]) &&
+                    ['foul','file','fowl'].includes(queue[1]))))) {
                     setPlay('foul drawn');
-                    // console.log("foul drawn");
                     queue.shift();
                     queue.shift();
                 } else if (queue.length > 0 &&
                     ['assist','system'].includes(queue[0])) {
-                    // assist
                     setPlay('assist');
-                    // console.log("assist");
                     queue.shift();
                 } else if (queue.length > 0 &&
                     ['steal','steel','still'].includes(queue[0])) {
-                    // steal
                     setPlay('steal');
-                    // console.log("steal");
                     queue.shift();
                 } else if (queue.length > 1 &&
                     ['turn','turns'].includes(queue[0]) &&
-                    ['over'].includes(queue[1])) {
-                    // turnover
+                    ['over','oven'].includes(queue[1])) {
                     setPlay('turnover');
-                    // console.log("turnover");
                     queue.shift();
                     queue.shift();
                 } else if (queue.length > 0 &&
                     ['turnover'].includes(queue[0])) {
-                    // turnover
                     setPlay('turnover');
-                    // console.log("turnover");
                     queue.shift();
                 } else if (queue.length > 0 &&
-                    ['block','blocks'].includes(queue[0])) {
-                    // block
+                    ['block','blocks','box'].includes(queue[0])) {
                     setPlay('block');
-                    // console.log("block");
                     queue.shift();
                 } else if (queue.length > 1 &&
                     ['number'].includes(queue[0])) {
                     if (/^\d\d?$/.test(queue[1])) {
                         setPlayer(queue[1]);
-                        // console.log('number ' + player);
                     } else if (numbers[queue[1]] !== undefined) {
                         setPlayer(numbers[queue[1]]);
-                        // console.log('number ' + player);
                     } else {
                         log('NOT A NUMBER: ' + queue[1]);
                     }
@@ -248,6 +210,11 @@
                     const w = queue.shift();
                     if (w !== '') {
                         log("NOT EXPECTED: " + w);
+                        var la;
+                        for (var i = 0; i < queue.length && i < 3; i++) {
+                            w += ' ' + queue[i];
+                        }
+                        log("NOT EXPECTED:" + la);
                     }
                 }
 
