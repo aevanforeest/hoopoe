@@ -1,1 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+        <link rel="manifest" href="manifest.json" />
+        <link rel="stylesheet" href="style.css" />
+        <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" />
+        <script type="text/javascript">
+        const navigationMap = {
+            0: 'players',
+            1: 'teams',
+            2: 'games',
+        };
 
+        function onClickAddPlayer(event) {
+            var e = event.target;
+            // TODO
+            console.log('Add player');
+        }
+
+        function onClickPlayer(event) {
+            var e = event.target;
+            // bubble up to .list-item
+            while (!e.classList.contains('list-item') && e) {
+                e = e.parentNode;
+            }
+            if (e) {
+                // TODO
+                console.log('Edit player: ' + e);
+            }
+        }
+
+        function onTouchEndPlayer(event) {
+            var e = event.target;
+            // bubble up to .list-item
+            while (!e.classList.contains('list-item') && e) {
+                e = e.parentNode;
+            }
+            if (e) {
+                if (Math.ceil(e.scrollLeft + e.offsetWidth) >= e.scrollWidth) {
+                    // TODO
+                    console.log('Delete player: ' + e);
+                }
+            }
+        }
+
+        function onClickNavigationBar(event) {
+            var e = event.target;
+            // bubble up to .navigation-item
+            while (!e.classList.contains('navigation-item') && e) {
+                e = e.parentNode;
+            }
+            if (e) {
+                document.querySelector('.navigation-item.active').classList.toggle('active');
+                e.classList.toggle('active');
+                document.querySelector('.page.visible').classList.toggle('visible');
+                document.querySelector('#' + navigationMap[[...e.parentNode.children].indexOf(e)]).classList.toggle('visible');
+            }
+        }
+        </script>
+    </head>
+    <body>
+        <div id="app">
+            <div id="menu-bar">
+                <i class="bx bx-menu"></i>
+                HOOPOE
+                <i class="bx bx-cog"></i>
+            </div>
+            <div id="players" class="page visible">
+                <div class="list-header">
+                    PLAYERS
+                    <i class="bx bx-plus-circle" onclick="onClickAddPlayer(event)"></i>
+                </div>
+                <div class="list-container" onclick="onClickPlayer(event)" ontouchend="onTouchEndPlayer(event)">
+                    <div class="list-item">
+                        <div class="list-item-slider">
+                            <div class="list-number">35</div>
+                            <div class="list-name">Kevin Durant</div>
+                        </div>
+                        <i class="bx bx-trash"></i>
+                    </div>
+                    <div class="list-item">
+                        <div class="list-item-slider">
+                            <div class="list-number">23</div>
+                            <div class="list-name">Lebron James</div>
+                        </div>
+                        <i class="bx bx-trash"></i>
+                    </div>
+                    <div class="list-item">
+                        <div class="list-item-slider">
+                            <div class="list-number">2</div>
+                            <div class="list-name">Shai Gilgeous-Alexander</div>
+                        </div>
+                        <i class="bx bx-trash"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div id="teams" class="page">
+                <div class="list-header">
+                    TEAMS
+                    <i class="bx bx-plus-circle"></i>
+                </div>
+                <div class="list-container">
+                    <div class="list-item">
+                        <div class="list-item-slider">
+                            <!-- <div class="list-number">ZZ</div> -->
+                            <div class="list-name">ZZ Leiden M12-1</div>
+                        </div>
+                        <i class="bx bx-trash"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div id="games" class="page">
+                <div class="list-header">
+                    GAMES
+                    <i class="bx bx-plus-circle"></i>
+                </div>
+                <div class="list-container">
+                    <div class="list-item">
+                        <div class="list-item-slider">
+                            <div class="list-game">
+                                <div class="list-date">17 November 2024</div>
+                                <div class="list-home-team">Heroes Den Bosch M12-1</div>
+                                <div class="list-home-score">68</div>
+                                <div class="list-away-team">ZZ Leiden M12-1</div>
+                                <div class="list-away-score">93</div>
+                            </div>
+                        </div>
+                        <i class="bx bx-trash"></i>
+                    </div>
+                    <div class="list-item">
+                        <div class="list-item-slider">
+                            <div class="list-game">
+                                <div class="list-date">10 November 2024</div>
+                                <div class="list-home-team">ZZ Leiden M12-1</div>
+                                <div class="list-home-score">75</div>
+                                <div class="list-away-team">Lokomotief M12-1</div>
+                                <div class="list-away-score">61</div>
+                            </div>
+                        </div>
+                        <i class="bx bx-trash"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div id="navigation-bar" onclick="onClickNavigationBar(event)">
+                <div class="navigation-item active"><i class="bx bx-user"></i>Players</div>
+                <div class="navigation-item"><i class="bx bx-calendar"></i>Teams</div>
+                <div class="navigation-item"><i class="bx bx-basketball"></i>Games</div>
+                <!-- <div class="navigation-item"><i class="bx bx-line-chart"></i>Stats</div> -->
+            </div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,153 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    height: 100vh;
+    overflow: hidden;
+    width: 100vw;
+}
+
+body {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
+#app {
+    background-color: black;
+    color: white;
+    display: grid;
+    font: normal 14pt Helvetica, sans-serif;
+    grid-template-rows: auto 1fr auto;
+    height: 100vh;
+    width: 100vw;
+}
+
+#menu-bar {
+    align-items: center;
+    color: gold;
+    display: flex;
+    justify-content: space-between;
+    margin: 8px;
+}
+
+.page {
+    border: 1px solid white;
+    border-radius: 8px;
+    display: none;
+    margin: 8px;
+    width: calc(100vw - 16px);
+}
+
+.page.visible {
+    display: block;
+}
+
+.list-header {
+    background-color: gold;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    color: black;
+    display: flex;
+    justify-content: space-between;
+    padding: 8px;
+}
+
+.list-header i.bx {
+    font-size:18pt;
+}
+
+.list-container {
+    overflow-y: scroll;
+}
+
+.list-item {
+    background-color: red;
+    display: flex;
+    margin: 8px;
+    overflow-x: scroll;
+    scroll-snap-type: x mandatory;
+}
+
+.list-item-slider {
+    align-items: center;
+    background-color: black;
+    display: flex;
+    gap: 8px;
+    min-width: 100%;
+    scroll-snap-align: start;
+}
+
+.list-number {
+    background-color: gold;
+    border-radius: 50%;
+    color: black;
+    font-size:12pt;
+    padding: 4px;
+    text-align: center;
+    width: calc(1lh + 8px);
+}
+
+.list-name {
+
+}
+
+.list-game {
+    background-color: #111;
+    display: grid;
+    gap: 4px;
+    grid-template-columns: 1fr auto;
+    width: 100%;
+}
+
+.list-date {
+    color: gray;
+    font-size: 12pt;
+    font-style: italic;
+    grid-column: span 2;
+}
+
+.list-home-team {
+
+}
+
+.list-slider div {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.list-item i.bx {
+    margin: auto 32px;
+}
+
+#navigation-bar {
+    align-items: center;
+    color: gold;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    font-size: 10pt;
+    text-align: center;
+}
+
+.navigation-item {
+    padding: 8px;
+}
+
+#navigation-bar i.bx {
+    display: block;
+    font-size: 14pt;
+    padding: 4px;
+}
+
+.navigation-item.active {
+    background-color: #333;
+}
+
+::-webkit-scrollbar {
+    height: 0;
+    width: 0;
+}
