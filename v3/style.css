@@ -68,7 +68,7 @@ body {
 
 .list-container {
     overflow-y: scroll;
-    overscroll-behavior-y: none;
+    /* overscroll-behavior-y: none; */
 }
 
 .list-item {
@@ -76,17 +76,23 @@ body {
     display: flex;
     margin: 8px;
     overflow-x: scroll;
-    overscroll-behavior-x: none;
+    /* overscroll-behavior-x: none; */
     scroll-snap-type: x mandatory;
 }
 
 .list-item-slider {
-    align-items: center;
+    /* align-items: center; */
     background-color: black;
-    display: flex;
-    gap: 8px;
+    /* display: flex; */
+    /* gap: 8px; */
     min-width: 100%;
     scroll-snap-align: start;
+}
+
+.list-player {
+    align-items: center;
+    display: flex;
+    gap: 8px;
 }
 
 .list-number {
@@ -103,7 +109,7 @@ body {
     display: grid;
     gap: 4px;
     grid-template-columns: 1fr auto;
-    width: 100%;
+    /* width: 100%; */
 }
 
 .list-date {
@@ -125,6 +131,7 @@ body {
 
 .list-item i.bx {
     margin: auto 32px;
+    display: inline-block;
 }
 
 #navigation-bar {
