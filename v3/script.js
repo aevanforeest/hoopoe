@@ -15,14 +15,24 @@ const players = {
     'd72fba2e-2855-4b82-aa49-612ee5e13aa7': { number: 14, name: 'Lucas' },
 };
 
+// function generateUuid() {
+//     var dt = new Date().getTime();
+//     var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+//         var r = (dt + Math.random() * 16) % 16 | 0;
+//         dt = Math.floor(dt / 16);
+//         return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+//     });
+//     return uuid;
+// }
+
 function initPlayerList() {
     const playerList = document.querySelector('#player-list');
     while (playerList.hasChildNodes()) {
         playerList.removeChild(playerList.firstChild);
     }
-    Object.keys(players)/*.sort(function(a, b) {
-        return players[a].number - players[b].number;
-    })*/.forEach((uuid) => {
+    Object.keys(players).sort(function(a, b) {
+        return (players[a].name > players[b].name ? 1 : -1);
+    }).forEach((uuid) => {
         const player = players[uuid];
         const li = document.createElement('div');
         li.classList.add('list-item');
@@ -59,15 +69,14 @@ const navigationMap = {
     3: 'stats',
 };
 
-function onClickAddPlayer(event) {
+function addPlayer(event) {
     var e = event.target;
     // TODO
     console.log('Add player');
 }
 
-function onClickPlayer(event) {
+function editPlayer(event) {
     var e = event.target;
-    // bubble up to .list-item
     while (e.classList && !e.classList.contains('list-item')) {
         e = e.parentNode;
     }
@@ -77,9 +86,8 @@ function onClickPlayer(event) {
     }
 }
 
-function onTouchEndPlayer(event) {
+function deletePlayer(event) {
     var e = event.target;
-    // bubble up to .list-item
     while (e.classList && !e.classList.contains('list-item')) {
         e = e.parentNode;
     }
@@ -87,13 +95,14 @@ function onTouchEndPlayer(event) {
         if (Math.ceil(e.scrollLeft + e.offsetWidth) >= e.scrollWidth) {
             // TODO
             console.log('Delete player: ' + e.id);
+            delete players[e.id];
+            initPlayerList();
         }
     }
 }
 
 function onClickNavigationBar(event) {
     var e = event.target;
-    // bubble up to .navigation-item
     while (e.classList && !e.classList.contains('navigation-item')) {
         e = e.parentNode;
     }

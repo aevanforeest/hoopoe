@@ -75,7 +75,7 @@ body {
     display: flex;
     margin: 8px;
     overflow-x: scroll;
-    overscroll-behavior-x: none;
+    /* overscroll-behavior-x: none; */
     scroll-snap-type: x mandatory;
 }
 
@@ -128,8 +128,7 @@ body {
 }
 
 .list-item i.bx {
-    margin: auto 32px;
-    display: inline-block;
+    margin: auto 20%;
 }
 
 #navigation-bar {
