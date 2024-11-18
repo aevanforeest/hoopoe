@@ -79,6 +79,7 @@ function addPlayer(event) {
     var e = event.target;
     // TODO
     console.log('Add player');
+    document.querySelector('#player.modal').classList.toggle('visible');
 }
 
 function editPlayer(event) {
@@ -89,6 +90,7 @@ function editPlayer(event) {
     if (e.classList) {
         // TODO
         console.log('Edit player: ' + e.id);
+        document.querySelector('#player.modal').classList.toggle('visible');
     }
 }
 
@@ -105,6 +107,10 @@ function deletePlayer(event) {
             initPlayerList();
         }
     }
+}
+
+function cancelPlayer(event) {
+    document.querySelector('#player.modal').classList.toggle('visible');
 }
 
 function onClickNavigationBar(event) {
