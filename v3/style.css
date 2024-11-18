@@ -28,6 +28,7 @@ body {
     grid-template-rows: auto 1fr auto;
     height: 100vh;
     width: 100vw;
+    padding-bottom: env(safe-area-inset-bottom);
 }
 
 #menu-bar {
@@ -127,19 +128,18 @@ body {
 
 #navigation-bar {
     align-items: center;
-    color: gold;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    font-size: 10pt;
-    padding-bottom: env(safe-area-inset-bottom);
-    text-align: center;
 }
 
 .navigation-item {
+    color: gold;
+    font-size: 10pt;
     padding: 8px;
+    text-align: center;
 }
 
-#navigation-bar i.bx {
+.navigation-item i.bx {
     display: block;
     font-size: 14pt;
     padding: 4px;
