@@ -13,6 +13,11 @@ const players = {
     'd72fba2e-2855-4b82-aa49-612ee5e13aa5': { number: 14, name: 'Dennis' },
     'd72fba2e-2855-4b82-aa49-612ee5e13aa6': { number: 14, name: 'Jip' },
     'd72fba2e-2855-4b82-aa49-612ee5e13aa7': { number: 14, name: 'Lucas' },
+    'd72fba2e-2855-4b82-aa49-612ee5e13aa8': { number: 0, name: 'Name' },
+    'd72fba2e-2855-4b82-aa49-612ee5e13aa9': { number: 0, name: 'Name' },
+    'd72fba2e-2855-4b82-aa49-612ee5e13aaa': { number: 0, name: 'Name' },
+    'd72fba2e-2855-4b82-aa49-612ee5e13aab': { number: 0, name: 'Name' },
+    'd72fba2e-2855-4b82-aa49-612ee5e13aac': { number: 0, name: 'Name' },
 };
 
 // function generateUuid() {

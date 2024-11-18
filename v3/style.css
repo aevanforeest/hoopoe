@@ -10,15 +10,14 @@
 
 html, body {
     height: 100%;
-    overflow: hidden;
     width: 100%;
 }
 
 body {
-    align-items: center;
+    /* align-items: center; */
     background-color: black;
-    display: flex;
-    justify-content: center;
+    /* display: flex; */
+    /* justify-content: center; */
     padding-bottom: env(safe-area-inset-bottom);
 }
 
@@ -27,7 +26,7 @@ body {
     color: white;
     display: grid;
     font: normal 14pt Helvetica, sans-serif;
-    grid-template-rows: auto 1fr auto;
+    grid-template-rows: min-content minmax(0, 1fr) min-content;
     height: 100%;
     width: 100%;
 }
@@ -67,13 +66,17 @@ body {
 }
 
 .list-container {
+    display: block;
+    overflow-x: hidden;
     overflow-y: scroll;
+    height: calc(100% - 38px);
 }
 
 .list-item {
     background-color: red;
     display: flex;
     margin: 8px;
+    overflow-y: hidden;
     overflow-x: scroll;
     overscroll-behavior-x: none;
     scroll-snap-type: x mandatory;
