@@ -10,19 +10,18 @@
 
 html, body {
     height: 100%;
-    overflow: hidden;
+    position: fixed;
     width: 100%;
 }
 
 body {
-    align-items: center;
-    display: flex;
-    justify-content: center;
-    padding:
-        env(safe-area-inset-top)
-        env(safe-area-inset-right)
-        env(safe-area-inset-bottom)
-        env(safe-area-inset-left);
+    /* align-items: center; */
+    background-color: black;
+    /* display: flex; */
+    /* justify-content: center; */
+    padding-bottom: env(safe-area-inset-bottom);
+    user-select:none;
+    -webkit-user-select:none;
 }
 
 #app {
@@ -30,7 +29,7 @@ body {
     color: white;
     display: grid;
     font: normal 14pt Helvetica, sans-serif;
-    grid-template-rows: auto 1fr auto;
+    grid-template-rows: min-content minmax(0, 1fr) min-content;
     height: 100%;
     width: 100%;
 }
@@ -65,31 +64,39 @@ body {
     padding: 8px;
 }
 
-.list-header i.bx {
-    font-size:18pt;
+.list-header .material-symbols-outlined {
+    font-size: 16pt;
 }
 
 .list-container {
+    display: block;
+    overflow-x: hidden;
     overflow-y: scroll;
-    overscroll-behavior-y: none;
+    height: calc(100% - 40px);
 }
 
 .list-item {
-    background-color: red;
     display: flex;
     margin: 8px;
+    overflow-y: hidden;
     overflow-x: scroll;
     overscroll-behavior-x: none;
     scroll-snap-type: x mandatory;
 }
 
 .list-item-slider {
-    align-items: center;
-    background-color: black;
-    display: flex;
-    gap: 8px;
+    /* align-items: center; */
+    /* background-color: black; */
+    /* display: flex; */
+    /* gap: 8px; */
     min-width: 100%;
     scroll-snap-align: start;
+}
+
+.list-player {
+    align-items: center;
+    display: flex;
+    gap: 8px;
 }
 
 .list-number {
@@ -106,7 +113,6 @@ body {
     display: grid;
     gap: 4px;
     grid-template-columns: 1fr auto;
-    width: 100%;
 }
 
 .list-date {
@@ -126,14 +132,18 @@ body {
     white-space: nowrap;
 }
 
-.list-item i.bx {
-    margin: auto 32px;
+.list-item .material-symbols-outlined {
+    align-items: center;
+    background-color: red;
+    display: flex;
+    justify-content: center;
+    padding: 0 20%;
 }
 
 #navigation-bar {
     align-items: center;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
 }
 
 .navigation-item {
@@ -143,8 +153,8 @@ body {
     text-align: center;
 }
 
-.navigation-item i.bx {
-    display: block;
+.navigation-item .material-symbols-outlined {
+    /* display: block; */
     font-size: 14pt;
     padding: 4px;
 }

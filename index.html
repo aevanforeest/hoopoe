@@ -1,90 +1,101 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <title>Hoopoe</title>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-    <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="format-detection" content="telephone=no" />
-    <link rel="manifest" href="manifest.json" />
-    <link rel="stylesheet" href="https://fonts.cdnfonts.com/css/basicdots" />
-    <link rel="stylesheet" href="style.css" />
-    <style type="text/css">
-    </style>
-  </head>
-  <body>
-    <app>
-      <div id="portrait-only"><img src="img/rotate-icon.png" /></div>
-      <div id="game">
-        <!-- header -->
-        <div id="game-header">
-          <div id="game-home-team">Home Team</div>
-          <div id="game-away-team">Away Team</div>
-          <div id="game-home-score">0</div>
-          <div id="game-quarter">
-            <div id="Q1">Q1</div>
-            <div id="Q2">Q2</div>
-            <div id="Q3">Q3</div>
-            <div id="Q4">Q4</div>
-            <div id="OT">OT</div>
-          </div>
-          <div id="game-away-score">0</div>
-          <div id="game-home-fouls" class="no-whitespace">
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
-          </div>
-          <div id="game-away-fouls" class="no-whitespace">
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
-          </div>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover" />
+        <link rel="manifest" href="manifest.json" />
+        <link rel="stylesheet" href="style.css" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+        <script src="script.js"></script>
+    </head>
+    <body>
+        <div id="app">
+            <div id="menu-bar">
+                <div class="material-symbols-outlined">menu</div>
+                HOOPOE
+                <div class="material-symbols-outlined">settings</div>
+            </div>
+
+            <div id="players" class="page visible">
+                <div class="list-header">
+                    PLAYERS
+                    <div class="material-symbols-outlined" onclick="addPlayer(event)">add_circle</div>
+                </div>
+                <div id="player-list" class="list-container" onclick="editPlayer(event)" ontouchend="deletePlayer(event)">
+                    <!-- <div class="list-item">
+                        <div class="list-item-slider">
+                            <div class="list-player">
+                                <div class="list-number"></div>
+                                <div class="list-name"></div>
+                            </div>
+                        </div>
+                        <i class="bx bx-trash"></i>
+                    </div> -->
+                </div>
+            </div>
+
+            <div id="teams" class="page">
+                <div class="list-header">
+                    TEAMS
+                    <div class="material-symbols-outlined">add_circle</div>
+                </div>
+                <div class="list-container">
+                    <div class="list-item">
+                        <div class="list-item-slider">
+                            <div class="list-team">
+                                <div class="list-name">ZZ Leiden M12-1</div>
+                            </div>
+                        </div>
+                        <div class="material-symbols-outlined">delete</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="games" class="page">
+                <div class="list-header">
+                    GAMES
+                    <div class="material-symbols-outlined">add_circle</div>
+                </div>
+                <div class="list-container">
+                    <div class="list-item">
+                        <div class="list-item-slider">
+                            <div class="list-game">
+                                <div class="list-date">17 November 2024</div>
+                                <div class="list-home-team">Heroes Den Bosch M12-1</div>
+                                <div class="list-home-score">68</div>
+                                <div class="list-away-team">ZZ Leiden M12-1</div>
+                                <div class="list-away-score">93</div>
+                            </div>
+                        </div>
+                        <div class="material-symbols-outlined">delete</div>
+                    </div>
+                    <div class="list-item">
+                        <div class="list-item-slider">
+                            <div class="list-game">
+                                <div class="list-date">10 November 2024</div>
+                                <div class="list-home-team">ZZ Leiden M12-1</div>
+                                <div class="list-home-score">75</div>
+                                <div class="list-away-team">Lokomotief M12-1</div>
+                                <div class="list-away-score">61</div>
+                            </div>
+                        </div>
+                        <div class="material-symbols-outlined">delete</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="stats" class="page">
+                <div class="list-header">
+                    STATS
+                </div>
+            </div>
+
+            <div id="navigation-bar" onclick="onClickNavigationBar(event)">
+                <div class="navigation-item active"><div class="material-symbols-outlined">person</div><br />Players</div>
+                <div class="navigation-item"><div class="material-symbols-outlined">table</div><br />Teams</div>
+                <div class="navigation-item"><div class="material-symbols-outlined">sports_basketball</div><br />Games</div>
+                <div class="navigation-item"><div class="material-symbols-outlined">bar_chart</div><br />Stats</div>
+            </div>
         </div>
-        <!-- play by play -->
-        <div id="game-play-by-play">
-        </div>
-        <!-- players -->
-        <div id="game-players" class="active">
-          <div class="player-button"></div>
-          <div class="player-button"></div>
-          <div class="player-button"></div>
-          <div class="player-button"></div>
-          <div class="player-button"></div>
-          <div class="player-button"></div>
-          <div class="player-button"></div>
-          <div class="player-button"></div>
-          <div class="player-button"></div>
-          <div class="player-button"></div>
-          <div class="player-button"></div>
-          <div class="player-button"></div>
-          <div class="player-button opponent"></div>
-        </div>
-        <!-- actions -->
-        <div id="game-actions" class="inactive">
-          <div class="action-button green"></div>
-          <div class="action-button green"></div>
-          <div class="action-button green"></div>
-          <div class="action-button red"></div>
-          <div class="action-button red"></div>
-          <div class="action-button red"></div>
-          <div class="action-button"></div>
-          <div class="action-button"></div>
-          <div class="action-button"></div>
-          <div class="action-button"></div>
-          <div class="action-button"></div>
-          <div class="action-button"></div>
-          <div class="action-button"></div>
-          <div class="action-button"></div>
-          <div class="action-button cancel">Cancel</div>
-        </div>
-      </div>
-    </app>
-    <script src="script.js"></script>
-  </body>
+    </body>
 </html>
