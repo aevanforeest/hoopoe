@@ -15,6 +15,8 @@ html, body {
 
 body {
     background-color: black;
+    overflow: hidden;
+    overscroll-behavior: none;
     padding-bottom: env(safe-area-inset-bottom);
     user-select:none;
     -webkit-user-select:none;
@@ -71,6 +73,9 @@ body {
     background-color: black;
     border: 1px solid white;
     border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     height: 80%;
     width: 80%;
     text-align: center;
@@ -84,6 +89,23 @@ body {
     display: flex;
     justify-content: space-between;
     padding: 8px;
+}
+
+.modal-buttons {
+    padding: 8px;
+}
+
+.modal-button-ok, .modal-button-cancel {
+    display: inline-block;
+    border: 1px solid white;
+    border-radius: 8px;
+    padding: 8px;
+    width: calc(50% - 4px);
+}
+
+.modal-button-ok {
+    background-color: gold;
+    color: black;
 }
 
 .list-header {
