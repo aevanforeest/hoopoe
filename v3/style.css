@@ -16,13 +16,10 @@ html, body {
 
 body {
     align-items: center;
+    background-color: black;
     display: flex;
     justify-content: center;
-    padding:
-        env(safe-area-inset-top)
-        env(safe-area-inset-right)
-        env(safe-area-inset-bottom)
-        env(safe-area-inset-left);
+    padding-bottom: env(safe-area-inset-bottom);
 }
 
 #app {
