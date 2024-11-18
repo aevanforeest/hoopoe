@@ -128,7 +128,8 @@ body {
 }
 
 .list-item .material-symbols-outlined {
-    margin: auto 20%;
+    margin: auto;
+    padding: 0 20%;
 }
 
 #navigation-bar {
