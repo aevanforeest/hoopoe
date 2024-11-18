@@ -32,7 +32,6 @@ function onTouchEndPlayer(event) {
     if (e.classList) {
         if (Math.ceil(e.scrollLeft + e.offsetWidth) >= e.scrollWidth) {
             // TODO
-            alert('Delete player');
             console.log('Delete player: ' + e);
         }
     }
