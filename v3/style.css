@@ -27,7 +27,7 @@ body {
     font: normal 14pt Helvetica, sans-serif;
     grid-template-rows: min-content minmax(0, 1fr) min-content;
     height: 100%;
-    position: fixed;
+    /* position: fixed; */
     width: 100%;
 }
 
@@ -73,6 +73,7 @@ body {
     border-radius: 8px;
     height: 80%;
     width: 80%;
+    text-align: center;
 }
 
 .modal-header {

@@ -90,6 +90,8 @@ function editPlayer(event) {
     if (e.classList) {
         // TODO
         console.log('Edit player: ' + e.id);
+        document.querySelector('#player-number').innerText = players[e.id].number;
+        document.querySelector('#player-name').innerText = players[e.id].name;
         document.querySelector('#player.modal').classList.toggle('visible');
     }
 }
