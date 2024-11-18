@@ -66,6 +66,7 @@ body {
 
 .list-container {
     overflow-y: scroll;
+    overscroll-behavior-y: none;
 }
 
 .list-item {
@@ -73,6 +74,7 @@ body {
     display: flex;
     margin: 8px;
     overflow-x: scroll;
+    overscroll-behavior-x: none;
     scroll-snap-type: x mandatory;
 }
 
@@ -113,7 +115,7 @@ body {
     grid-column: span 2;
 }
 
-.list-home-team {
+.list-home-team, .list-home-score {
     color: gold;
 }
 
@@ -148,4 +150,8 @@ body {
 
 .navigation-item.active {
     background-color: #333;
+}
+
+.safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
 }
