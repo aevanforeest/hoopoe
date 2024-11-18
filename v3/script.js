@@ -51,9 +51,10 @@ function initPlayerList() {
         lp.appendChild(lnm);
         lis.appendChild(lp);
         li.appendChild(lis);
-        const i = document.createElement('i');
-        i.classList.add('bx', 'bx-trash');
-        li.append(i);
+        const mso = document.createElement('div');
+        mso.classList.add('material-symbols-outlined');
+        mso.innerText = 'delete';
+        li.append(mso);
         playerList.appendChild(li);
     });
 };

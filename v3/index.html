@@ -5,21 +5,21 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover" />
         <link rel="manifest" href="manifest.json" />
         <link rel="stylesheet" href="style.css" />
-        <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
         <script src="script.js"></script>
     </head>
     <body>
         <div id="app">
             <div id="menu-bar">
-                <i class="bx bx-menu"></i>
+                <div class="material-symbols-outlined">menu</div>
                 HOOPOE
-                <i class="bx bx-cog"></i>
+                <div class="material-symbols-outlined">settings</div>
             </div>
 
             <div id="players" class="page visible">
                 <div class="list-header">
                     PLAYERS
-                    <i class="bx bx-plus-circle" onclick="addPlayer(event)"></i>
+                    <div class="material-symbols-outlined" onclick="addPlayer(event)">add_circle</div>
                 </div>
                 <div id="player-list" class="list-container" onclick="editPlayer(event)" ontouchend="deletePlayer(event)">
                     <!-- <div class="list-item">
@@ -37,7 +37,7 @@
             <div id="teams" class="page">
                 <div class="list-header">
                     TEAMS
-                    <i class="bx bx-plus-circle"></i>
+                    <div class="material-symbols-outlined">add_circle</div>
                 </div>
                 <div class="list-container">
                     <div class="list-item">
@@ -46,7 +46,7 @@
                                 <div class="list-name">ZZ Leiden M12-1</div>
                             </div>
                         </div>
-                        <i class="bx bx-trash"></i>
+                        <div class="material-symbols-outlined">delete</div>
                     </div>
                 </div>
             </div>
@@ -54,7 +54,7 @@
             <div id="games" class="page">
                 <div class="list-header">
                     GAMES
-                    <i class="bx bx-plus-circle"></i>
+                    <div class="material-symbols-outlined">add_circle</div>
                 </div>
                 <div class="list-container">
                     <div class="list-item">
@@ -67,7 +67,7 @@
                                 <div class="list-away-score">93</div>
                             </div>
                         </div>
-                        <i class="bx bx-trash"></i>
+                        <div class="material-symbols-outlined">delete</div>
                     </div>
                     <div class="list-item">
                         <div class="list-item-slider">
@@ -79,7 +79,7 @@
                                 <div class="list-away-score">61</div>
                             </div>
                         </div>
-                        <i class="bx bx-trash"></i>
+                        <div class="material-symbols-outlined">delete</div>
                     </div>
                 </div>
             </div>
@@ -91,10 +91,10 @@
             </div>
 
             <div id="navigation-bar" onclick="onClickNavigationBar(event)">
-                <div class="navigation-item active"><i class="bx bx-user"></i>Players</div>
-                <div class="navigation-item"><i class="bx bx-calendar"></i>Teams</div>
-                <div class="navigation-item"><i class="bx bx-basketball"></i>Games</div>
-                <div class="navigation-item"><i class="bx bx-line-chart"></i>Stats</div>
+                <div class="navigation-item active"><div class="material-symbols-outlined">person</div><br />Players</div>
+                <div class="navigation-item"><div class="material-symbols-outlined">table</div><br />Teams</div>
+                <div class="navigation-item"><div class="material-symbols-outlined">sports_basketball</div><br />Games</div>
+                <div class="navigation-item"><div class="material-symbols-outlined">bar_chart</div><br />Stats</div>
             </div>
         </div>
     </body>

@@ -62,8 +62,8 @@ body {
     padding: 8px;
 }
 
-.list-header i.bx {
-    font-size:18pt;
+.list-header .material-symbols-outlined {
+    font-size:16pt;
 }
 
 .list-container {
@@ -75,7 +75,7 @@ body {
     display: flex;
     margin: 8px;
     overflow-x: scroll;
-    /* overscroll-behavior-x: none; */
+    overscroll-behavior-x: none;
     scroll-snap-type: x mandatory;
 }
 
@@ -127,7 +127,7 @@ body {
     white-space: nowrap;
 }
 
-.list-item i.bx {
+.list-item .material-symbols-outlined {
     margin: auto 20%;
 }
 
@@ -144,8 +144,8 @@ body {
     text-align: center;
 }
 
-.navigation-item i.bx {
-    display: block;
+.navigation-item .material-symbols-outlined {
+    /* display: block; */
     font-size: 14pt;
     padding: 4px;
 }
