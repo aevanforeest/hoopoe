@@ -68,7 +68,6 @@ body {
 
 .list-container {
     overflow-y: scroll;
-    /* overscroll-behavior-y: none; */
 }
 
 .list-item {
@@ -76,7 +75,7 @@ body {
     display: flex;
     margin: 8px;
     overflow-x: scroll;
-    /* overscroll-behavior-x: none; */
+    overscroll-behavior-x: none;
     scroll-snap-type: x mandatory;
 }
 
@@ -109,7 +108,6 @@ body {
     display: grid;
     gap: 4px;
     grid-template-columns: 1fr auto;
-    /* width: 100%; */
 }
 
 .list-date {
@@ -137,7 +135,7 @@ body {
 #navigation-bar {
     align-items: center;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
 }
 
 .navigation-item {

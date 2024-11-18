@@ -1,7 +1,62 @@
+const players = {
+    'd72fba2e-2855-4b82-aa49-612ee5e13a9a': { number: 4,  name: 'David' },
+    'd72fba2e-2855-4b82-aa49-612ee5e13a9b': { number: 5,  name: 'Boris' },
+    'd72fba2e-2855-4b82-aa49-612ee5e13a9c': { number: 6,  name: 'Gian' },
+    'd72fba2e-2855-4b82-aa49-612ee5e13a9d': { number: 7,  name: 'Tibe' },
+    'd72fba2e-2855-4b82-aa49-612ee5e13a9e': { number: 8,  name: 'Alexander' },
+    'd72fba2e-2855-4b82-aa49-612ee5e13a9f': { number: 9,  name: 'Felix' },
+    'd72fba2e-2855-4b82-aa49-612ee5e13aa0': { number: 10, name: 'Jiliam-James' },
+    'd72fba2e-2855-4b82-aa49-612ee5e13aa1': { number: 11, name: 'Enzo' },
+    'd72fba2e-2855-4b82-aa49-612ee5e13aa2': { number: 12, name: 'Jonathan' },
+    'd72fba2e-2855-4b82-aa49-612ee5e13aa3': { number: 13, name: 'Imme' },
+    'd72fba2e-2855-4b82-aa49-612ee5e13aa4': { number: 15, name: 'Filippo' },
+    'd72fba2e-2855-4b82-aa49-612ee5e13aa5': { number: 14, name: 'Dennis' },
+    'd72fba2e-2855-4b82-aa49-612ee5e13aa6': { number: 14, name: 'Jip' },
+    'd72fba2e-2855-4b82-aa49-612ee5e13aa7': { number: 14, name: 'Lucas' },
+};
+
+function initPlayerList() {
+    const playerList = document.querySelector('#player-list');
+    while (playerList.hasChildNodes()) {
+        playerList.removeChild(playerList.firstChild);
+    }
+    Object.keys(players)/*.sort(function(a, b) {
+        return players[a].number - players[b].number;
+    })*/.forEach((uuid) => {
+        const player = players[uuid];
+        const li = document.createElement('div');
+        li.classList.add('list-item');
+        li.id = uuid;
+        const lis = document.createElement('div');
+        lis.classList.add('list-item-slider');
+        const lp = document.createElement('div');
+        lp.classList.add('list-player');
+        const lnr = document.createElement('div');
+        lnr.classList.add('list-number');
+        lnr.innerText = player.number;
+        lp.appendChild(lnr);
+        const lnm = document.createElement('div');
+        lnm.classList.add('list-name');
+        lnm.innerText = player.name;
+        lp.appendChild(lnm);
+        lis.appendChild(lp);
+        li.appendChild(lis);
+        const i = document.createElement('i');
+        i.classList.add('bx', 'bx-trash');
+        li.append(i);
+        playerList.appendChild(li);
+    });
+};
+
+window.addEventListener('load', (event) => {
+    initPlayerList();
+});
+
 const navigationMap = {
     0: 'players',
     1: 'teams',
     2: 'games',
+    3: 'stats',
 };
 
 function onClickAddPlayer(event) {
@@ -14,12 +69,11 @@ function onClickPlayer(event) {
     var e = event.target;
     // bubble up to .list-item
     while (e.classList && !e.classList.contains('list-item')) {
-        console.log(e, e.classList);
         e = e.parentNode;
     }
     if (e.classList) {
         // TODO
-        console.log('Edit player: ' + e);
+        console.log('Edit player: ' + e.id);
     }
 }
 
@@ -32,7 +86,7 @@ function onTouchEndPlayer(event) {
     if (e.classList) {
         if (Math.ceil(e.scrollLeft + e.offsetWidth) >= e.scrollWidth) {
             // TODO
-            console.log('Delete player: ' + e);
+            console.log('Delete player: ' + e.id);
         }
     }
 }
