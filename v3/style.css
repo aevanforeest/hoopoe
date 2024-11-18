@@ -97,10 +97,6 @@ body {
     width: calc(1lh + 8px);
 }
 
-.list-name {
-
-}
-
 .list-game {
     display: grid;
     gap: 4px;
@@ -135,6 +131,7 @@ body {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     font-size: 10pt;
+    padding-bottom: env(safe-area-inset-bottom);
     text-align: center;
 }
 
@@ -150,8 +147,4 @@ body {
 
 .navigation-item.active {
     background-color: #333;
-}
-
-.safe-bottom {
-    padding-bottom: env(safe-area-inset-bottom);
 }
