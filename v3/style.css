@@ -133,8 +133,10 @@ body {
 }
 
 .list-item .material-symbols-outlined {
+    align-items: center;
     background-color: red;
-    margin: auto;
+    display: flex;
+    justify-content: center;
     padding: 0 20%;
 }
 
