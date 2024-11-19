@@ -23,19 +23,16 @@ body {
 }
 
 #app {
-    /* background-color: #fdf7e1; */
     color: black;
     display: grid;
     font: normal 14pt Helvetica, sans-serif;
     grid-template-rows: min-content minmax(0, 1fr) min-content;
     height: 100%;
-    /* position: fixed; */
     width: 100%;
 }
 
 #menu-bar {
     align-items: center;
-    /* color: black; */
     display: flex;
     justify-content: space-between;
     margin: 8px;
@@ -171,10 +168,6 @@ body {
 }
 
 .list-item-slider {
-    /* align-items: center; */
-    /* background-color: black; */
-    /* display: flex; */
-    /* gap: 8px; */
     min-width: 100%;
     scroll-snap-align: start;
 }
@@ -189,7 +182,7 @@ body {
     background-color: orange;
     border-radius: 50%;
     color: black;
-    font-size:12pt;
+    font-size: 12pt;
     padding: 4px;
     text-align: center;
     width: calc(1lh + 8px);
@@ -209,7 +202,7 @@ body {
 }
 
 .list-home-team, .list-home-score {
-    color: gold;
+    color: orange;
 }
 
 .list-slider div {
