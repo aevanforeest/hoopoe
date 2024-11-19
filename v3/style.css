@@ -71,6 +71,7 @@ body {
 }
 
 .modal-dialog {
+    align-items: center;
     background-color: white;
     border: 1px solid black;
     border-radius: 8px;
@@ -91,10 +92,41 @@ body {
     display: flex;
     justify-content: space-between;
     padding: 8px;
+    width: 100%;
+}
+
+.modal-jersey {
+    background-image: url(jersey.png);
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 80%;
+    height: 80%;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 8px;
+}
+
+.modal-jersey input {
+    background-color: transparent;
+    border: none;
+    font: normal 16pt Helvetica, sans-serif;
+    padding: 8px;
+    text-align: center;
+    width: 80%;
+}
+
+.modal-jersey input#player-number {
+    color: orange;
+    font-size: 32pt;
+    font-weight: bold;
 }
 
 .modal-buttons {
     padding: 8px;
+    width: 80%;
 }
 
 .modal-button-ok, .modal-button-cancel {

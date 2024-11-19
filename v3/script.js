@@ -79,8 +79,8 @@ function addPlayer(event) {
     var e = event.target;
     // TODO
     console.log('Add player');
-    document.querySelector('#player-number').innerText = '#'
-    document.querySelector('#player-name').innerText = '...';
+    document.querySelector('#player-number').value = '#'
+    document.querySelector('#player-name').value = '...';
     document.querySelector('#player.modal').classList.toggle('visible');
 }
 
@@ -91,9 +91,12 @@ function editPlayer(event) {
     }
     if (e.classList) {
         // TODO
-        console.log('Edit player: ' + e.id);
-        document.querySelector('#player-number').innerText = players[e.id].number;
-        document.querySelector('#player-name').innerText = players[e.id].name;
+        const uuid = e.id;
+        const player = players[uuid];
+        console.log('Edit player: ' + uuid);
+        document.querySelector('#player-uuid').value = uuid;
+        document.querySelector('#player-number').value = player.number;
+        document.querySelector('#player-name').value = player.name;
         document.querySelector('#player.modal').classList.toggle('visible');
     }
 }

@@ -40,8 +40,11 @@
                         PLAYER
                         <div class="material-symbols-outlined" onclick="cancelPlayer(event)">cancel</div>
                     </div>
-                    <div id="player-name">PLAYER NAME</div>
-                    <div id="player-number">PLAYER NUMBER</div>
+                    <div class="modal-jersey">
+                        <input type="hidden" id="player-uuid" />
+                        <input type="text" id="player-name" />
+                        <input type="text" id="player-number" inputmode="numberic" maxlength="2" />
+                    </div>
                     <div class="modal-buttons">
                         <div class="modal-button-ok" onclick="okPlayer(event)">OK</div>
                         <div class="modal-button-cancel" onclick="cancelPlayer(event)">Cancel</div>
