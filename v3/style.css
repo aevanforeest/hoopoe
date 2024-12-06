@@ -76,9 +76,9 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: 80%;
-    width: 80%;
+    height: calc(100% - 16px);
     text-align: center;
+    width: calc(100% - 16px);
 }
 
 .modal-header {
@@ -109,29 +109,113 @@ body {
 .modal-jersey input {
     background-color: transparent;
     border: none;
-    font: normal 16pt Helvetica, sans-serif;
     padding: 8px;
     text-align: center;
     width: 80%;
 }
 
+.modal-jersey input#player-name {
+    color: black;
+    font: normal 16pt Helvetica, sans-serif;
+}
+
 .modal-jersey input#player-number {
     color: orange;
-    font-size: 32pt;
-    font-weight: bold;
+    font: bold 64pt Helvetica, sans-serif;
+}
+
+#gameHeader {
+    color: black;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    width: calc(100% - 16px);
+}
+
+#gameHeader > div:nth-child(even) {
+    text-align: right;
+}
+#gameHeader > div:nth-child(odd) {
+    text-align: left;
+}
+
+#gamePlayByPlay {
+    border: 1px solid black;
+    border-radius: 8px;
+    display: block;
+    height: 100%;
+    margin-bottom: 8px;
+    width: calc(100% - 16px);
+}
+
+.modal-button-grid {
+    display: none;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+    gap: 8px;
+    margin-bottom: 8px;
+    width: calc(100% - 16px);
+}
+
+.modal-button-grid.visible {
+    display: grid;
+}
+
+.modal-button-grid > div {
+    border: 1px solid black;
+    border-radius: 8px;
+    font: bold 18pt Helvetica, sans-serif;
+    padding: 8px;
+    display: grid;
+    align-items: center;
+}
+
+.modal-button-grid > div.gold {
+    background-color: gold;
+    color: black;
+}
+
+.modal-button-grid > div.green {
+    background-color: green;
+    color: white;
+}
+
+.modal-button-grid > div.red {
+    background-color: red;
+    color: white;
+}
+
+.modal-button-grid > div.gray {
+    background-color: lightgray;
+    color: black;
+}
+
+.modal-button-grid > div.white {
+    background-color: white;
+    color: black;
+}
+
+.modal-button-grid > div.black {
+    background-color: black;
+    color: white;
+}
+
+.modal-button-grid > div > span {
+    display: block;
+    font: normal 10pt Helvetica, sans-serif;
 }
 
 .modal-buttons {
-    padding: 8px;
+    display: grid;
+    gap: 8px;
+    grid-template-columns: repeat(2, 1fr);
+    margin-bottom: 8px;
     width: 80%;
 }
 
 .modal-button-ok, .modal-button-cancel {
-    display: inline-block;
     border: 1px solid black;
     border-radius: 8px;
     padding: 8px;
-    width: calc(50% - 4px);
 }
 
 .modal-button-ok {
@@ -161,18 +245,19 @@ body {
 
 .list-item {
     display: flex;
-    margin: 8px;
+    /* margin: 8px; */
     overflow-x: scroll;
     overflow-y: hidden;
     scroll-snap-type: x mandatory;
 }
 
 .list-item-slider {
+    padding: 4px;
     min-width: 100%;
     scroll-snap-align: start;
 }
 
-.list-player {
+.list-player, .list-team {
     align-items: center;
     display: flex;
     gap: 8px;
@@ -190,7 +275,7 @@ body {
 
 .list-game {
     display: grid;
-    gap: 4px;
+    /* gap: 8px; */
     grid-template-columns: 1fr auto;
 }
 
